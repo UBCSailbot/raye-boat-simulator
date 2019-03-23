@@ -28,9 +28,12 @@ state_eq.OutputUnit={'m/s','m/s','rad/s','rad/s'};
 %% Save the Model
 save state_eq.mat state_eq
 
-%% check stability, controllability, observability, stabilizability
- 
+%% check stability, controllability, observability, stabilizability of linear model
 eig(state_eq.A); %not stable
 rank(ctrb(state_eq.A,state_eq.B))%fully controllable
 rank(obsv(state_eq.A,state_eq.C));%fully observable
+
+%% create non linear model block for simulink
+get_non_linear_states=matlabFunction(ss_eq);
+
 
