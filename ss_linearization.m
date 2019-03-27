@@ -18,7 +18,7 @@ v_tw=0; alpha_tw=0;
 
 linearized_A = subs(linearized_A);
 linearized_B_ctrl = subs(linearized_B_ctrl);
-linearized_B_disturb = subs(linearized_B_disturb);
+linearized_B_disturb = real(eval(subs(linearized_B_disturb)));
 
 C = [1 0 0 0 0 0 0 0;
     0 1 0 0 0 0 0 0;
@@ -28,6 +28,7 @@ C = [1 0 0 0 0 0 0 0;
 D = zeros(4,2);
 
 state_eq = ss(eval(real(linearized_A)), eval(real(linearized_B_ctrl)), C, D);
+
 % Set the Inputs and Output names of the model with units
 state_eq.InputName = {'sail','rudder'};
 state_eq.InputUnit={'rad','rad'};
