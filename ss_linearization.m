@@ -6,10 +6,19 @@ v_in = transpose(eval(subs(J,[psi,phi],[psi_in,phi_in])\[dx_in;dy_in;roll_in;yaw
 ang_in = [sangle_in,rangle_in];
 
 linearized_A = jacobian(ss_eq,ss_vars);
-linearized_B = jacobian(ss_eq,ss_in);
+linearized_B_ctrl = jacobian(ss_eq,ss_in_controllable);
+linearized_B_disturb = jacobian(ss_eq,ss_in_disturbance);
+%begin subs 
+%state variables
+x=0; y=0; phi=0; psi=0; surge=1; sway=0; roll=0; yaw=0;
+%ss_in_contrrolable
+sangle=0; rangle=0;
+%ss_in_disturbance;
+v_tw=0; alpha_tw=0;
 
-linearized_A = subs(linearized_A,[ss_vars, ss_in], [n_in, v_in, ang_in]);
-linearized_B = subs(linearized_B,[ss_vars, ss_in], [n_in, v_in, ang_in]);
+linearized_A = subs(linearized_A);
+linearized_B_ctrl = subs(linearized_B_ctrl);
+linearized_B_disturb = subs(linearized_B_disturb);
 
 C = [1 0 0 0 0 0 0 0;
     0 1 0 0 0 0 0 0;
@@ -18,7 +27,7 @@ C = [1 0 0 0 0 0 0 0;
 
 D = zeros(4,2);
 
-state_eq = ss(eval(real(linearized_A)), eval(real(linearized_B)), C, D);
+state_eq = ss(eval(real(linearized_A)), eval(real(linearized_B_ctrl)), C, D);
 % Set the Inputs and Output names of the model with units
 state_eq.InputName = {'sail','rudder'};
 state_eq.InputUnit={'rad','rad'};
