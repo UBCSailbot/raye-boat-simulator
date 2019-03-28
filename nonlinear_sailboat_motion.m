@@ -6,7 +6,7 @@
 %% Collect Input Data
 % run('generateData.m');
 % OR (Uncomment desired data option)
-run('setData.m');
+%run('setData.m');
 % load('inputData.mat');
 
 %% State Equation Setup
@@ -47,6 +47,7 @@ added_mass = waterline_vol * rho_w /2; %
 
 %State space variables
 syms x y psi phi surge sway roll yaw dx dy sangle rangle
+syms v_tw alpha_tw %these are disturbance inputs (e.g. B2 in Xdot=Ax+B1u1+B2u2)
 
 %Variable Constants
 syms v_tw_b v_tw_n v_aw_b v_ar_b v_ak_b v_ah_n alpha_ah v_ah alpha_ak v_ak alpha_ar v_ar alpha_aw v_aw lift drag T T_s T_r D_heel D_h D_yaw M_righting A rho alpha v
@@ -169,6 +170,7 @@ n_dot = J*vss;
 %State Space and Linearization
 ss_eq = [n_dot;v_dot];
 ss_vars = [x y phi psi surge sway roll yaw];
-ss_in = [sangle, rangle];
+ss_in_controllable = [sangle, rangle];
+ss_in_disturbance=[v_tw, alpha_tw];
 
-save('equations','v_dot','n_dot','ss_eq','ss_vars','ss_in','J','x', 'y', 'psi', 'phi', 'surge', 'sway', 'roll', 'yaw', 'dx', 'dy', 'sangle', 'rangle');
+save('equations','v_dot','n_dot','ss_eq','ss_vars','ss_in_controllable','ss_in_disturbance','J','x', 'y', 'psi', 'phi', 'surge', 'sway', 'roll', 'yaw', 'dx', 'dy', 'sangle', 'rangle');
