@@ -15,7 +15,7 @@
 m = 1000; %kg
 I_xx = 100; %kg m^2
 I_zz = 100; %kg m^2
-A_s = 10; %m^2
+A_s = 12.06384791749; %m^2
 A_r = 1; %m^2
 A_h = 1; %m^2
 x_m = 0.5; %m x-coord of mast in b-frame
@@ -142,7 +142,7 @@ T = T_s + T_r;
 % Righting Moment
 M_righting(phi) = [0;
     0;
-    a_right*phi^2+b_right*phi;
+    heaviside(x)*(-19651 + 95403.7*(pi - x) + 22347.1*(pi - x)^2 - 27657.6*(pi - x)^3 + 3865.49*(pi - x)^4 - 19565.4*cos(x) - 99987*sin(x)) - heaviside(-x)*(-19651. + 95403.7*(pi + x) + 22347.1*(pi + x)^2 - 27657.6*(pi + x)^3 + 3865.49*(pi + x)^4 - 19565.4*cos(x) + 99987*sin(x));
     0];
 
 %% Damping Forces
