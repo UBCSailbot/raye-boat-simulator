@@ -20,11 +20,13 @@ nlobj.Model.StateFcn = "boat_state_function";
 nlobj.Model.IsContinuousTime = true;
 
 
-nlobj.Model.NumberOfParameters = 1;
+nlobj.Model.NumberOfParameters = 0;
 
-nlobj.Model.OutputFcn = @(x,u,Ts) [x(:)];
+nlobj.Model.OutputFcn = @(x,u) [x(:)];
 
 nlobj.Weights.OutputVariables = ones(1,8)*3;
 nlobj.Weights.ManipulatedVariablesRate = ones(1,2)*0.1;
 
-validateFcns(nlobj,ones(8,1),[2,2],[2,2],[],{Ts})
+x0=ones(8,1)
+u0=[2,2]
+validateFcns(nlobj, x0, u0, u0);
