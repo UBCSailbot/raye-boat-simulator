@@ -172,5 +172,6 @@ ss_eq = [n_dot;v_dot];
 ss_vars = [x y phi psi surge sway roll yaw];
 ss_in_controllable = [sangle, rangle];
 ss_in_disturbance=[v_tw, alpha_tw];
+ss_in=[ss_in_controllable,ss_in_disturbance]
 
-save('equations','v_dot','n_dot','ss_eq','ss_vars','ss_in_controllable','ss_in_disturbance','J','x', 'y', 'psi', 'phi', 'surge', 'sway', 'roll', 'yaw', 'dx', 'dy', 'sangle', 'rangle');
+save('equations','v_dot','n_dot','ss_eq','ss_vars','ss_in_controllable','ss_in_disturbance','ss_in','J','x', 'y', 'psi', 'phi', 'surge', 'sway', 'roll', 'yaw', 'dx', 'dy', 'sangle', 'rangle');
