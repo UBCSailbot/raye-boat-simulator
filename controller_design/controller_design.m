@@ -23,10 +23,16 @@ nlobj.Model.IsContinuousTime = true;
 nlobj.Model.NumberOfParameters = 0;
 
 nlobj.Model.OutputFcn = @(x,u) [x(:)];
+nlobj.Optimization.CustomEqConFcn = @(X,U,data) X(end,:)';
 
 nlobj.Weights.OutputVariables = ones(1,8)*3;
 nlobj.Weights.ManipulatedVariablesRate = ones(1,2)*0.1;
 
+for ct = 1:nu
+    nlobj.MV(ct).Min = 0.1;
+    nlobj.MV(ct).Max = pi/2-0.1;
+end
+
 x0=ones(8,1)
-u0=[2,2]
+u0=[0,0]
 validateFcns(nlobj, x0, u0, u0);
