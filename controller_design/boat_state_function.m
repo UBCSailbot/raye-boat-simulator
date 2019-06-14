@@ -5,8 +5,9 @@ function dxdt=boat_state_function(x,u)
 function Y = heaviside(X)
 %HEAVISIDE    Step function.
 Y = zeros(size(X));
-Y(X > 0) = 1;
-Y(X == 0) = .5;
+% Y(X > 0) = 1;
+% Y(X == 0) = .5;
+Y=exp(50*X)./(1+exp(50*X))
 end
 
 dxdt =[

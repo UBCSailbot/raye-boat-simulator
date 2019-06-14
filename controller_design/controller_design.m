@@ -13,8 +13,8 @@ nlobj = nlmpc(nx,ny,'MV',[1,2],'MD',[3,4])
 Ts = 0.1;
 nlobj.Ts = Ts;
 
-nlobj.PredictionHorizon = 10;
-nlobj.ControlHorizon = 5;
+nlobj.PredictionHorizon = 2;
+nlobj.ControlHorizon = 1;
 
 nlobj.Model.StateFcn = "boat_state_function";
 nlobj.Model.IsContinuousTime = true;

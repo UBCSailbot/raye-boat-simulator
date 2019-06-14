@@ -142,7 +142,9 @@ T = T_s + T_r;
 % Righting Moment
 M_righting(phi) = [0;
     0;
-    heaviside(x)*(-19651 + 95403.7*(pi - x) + 22347.1*(pi - x)^2 - 27657.6*(pi - x)^3 + 3865.49*(pi - x)^4 - 19565.4*cos(x) - 99987*sin(x)) - heaviside(-x)*(-19651. + 95403.7*(pi + x) + 22347.1*(pi + x)^2 - 27657.6*(pi + x)^3 + 3865.49*(pi + x)^4 - 19565.4*cos(x) + 99987*sin(x));
+    %(phi+phi^2)*10;
+    (phi)*10000;
+    %heaviside(x)*(-19651 + 95403.7*(pi - x) + 22347.1*(pi - x)^2 - 27657.6*(pi - x)^3 + 3865.49*(pi - x)^4 - 19565.4*cos(x) - 99987*sin(x)) - heaviside(-x)*(-19651. + 95403.7*(pi + x) + 22347.1*(pi + x)^2 - 27657.6*(pi + x)^3 + 3865.49*(pi + x)^4 - 19565.4*cos(x) + 99987*sin(x));
     0];
 
 %% Damping Forces
@@ -164,7 +166,7 @@ D_yaw = [0;
 D = D_heel + D_h + D_yaw;
 
 %% Non-linear equation
-v_dot = M^(-1)*(C*vss - D - M_righting(phi) + T);
+v_dot = M^(-1)*(C*vss + D*100 - M_righting(phi) + T);
 n_dot = J*vss;
 
 %State Space and Linearization
