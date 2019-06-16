@@ -166,7 +166,11 @@ D_yaw = [0;
 D = D_heel + D_h + D_yaw;
 
 %% Non-linear equation
-v_dot = M^(-1)*(C*vss + D*100 - M_righting(phi) + T);
+%v_dot = M^(-1)*(-C*vss -D - M_righting(phi) + T);
+v_dot = M^(-1)*(-C*vss +D - M_righting(phi) + T);
+%v_dot = M^(-1)*(-C*vss -D - M_righting(phi));
+
+%v_dot = M^(-1)*(T);
 n_dot = J*vss;
 
 %State Space and Linearization
