@@ -58,6 +58,8 @@ added_mass = waterline_vol * rho_w /2; %
 
 zkeel =1 %center of effort bugbc
 xkeel =1 %center of effort
+zheel = 1
+xheel = 1
 
 %% define modular blocks
 %define M
@@ -137,10 +139,11 @@ alpha_ah = atan2(v_ah_n(2),-v_ah_n(1));
  %define D
  
  % bugbc! missing D_h is wrong
- D_h = [drag(rho_w,A_h,v_ah,alpha_ah)*cos(alpha_ah);
-    -drag(rho_w,A_h,v_ah,alpha_ah)*sin(alpha_ah)*cos(phi);
-    (-drag(rho_w,A_h,v_ah,alpha_ah)*sin(alpha_ah)*cos(phi))*abs(hCoE_z);
-    (drag(rho_w,A_h,v_ah,alpha_ah)*sin(alpha_ah)*cos(phi))*abs(hCoE_x)];
+ D_h = [Frh(v_ah)*cos(alpha_ah);
+     -Frh(v_ah)*sin(alpha_ah)*cos(phi);
+     (-Frh(v_ah)*sin(alpha_ah)*cos(phi))*abs(zheel);
+     Frh(v_ah)*sin(alpha_ah)*cos(phi)*abs(xheel);
+ ];
 
 liftk=lift(rho_w,A_h,v_ak,alpha_ak);
 dragk=drag(rho_w,A_h,v_ak,alpha_ak);
@@ -170,7 +173,7 @@ T_s = [lift(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw)-drag(rho_a,A_s,v_aw,alpha_s)*c
     (lift(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw)+drag(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw))*abs(sCoE_z);
     -(lift(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw)-drag(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw))*x_sm*sin(sangle) + (lift(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw)+drag(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw))*(x_m-x_sm*cos(sangle))];
 % Rudder Forces
-T_r = [-drag(rho_w,A_r,v_ah,alpha_r);
+T_r = [-drag(rho_w,A_r,v_ar,alpha_r);
     lift(rho_w,A_r,v_ar,alpha_r);
     lift(rho_w,A_r,v_ar,alpha_r)*abs(rCoE_z);
     -lift(rho_w,A_r,v_ar,alpha_r)*abs(rCoE_x)];
