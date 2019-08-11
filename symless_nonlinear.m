@@ -26,22 +26,22 @@ A_r = 1; %m^2
 A_h = 1; %m^2
 A_k = 1; %m^2
 x_m = 0.5; %m x-coord of mast in b-frame
-rCoE_x = 0.1; %m
-rCoE_y = 0.1; %m
-rCoE_z = 0.3; %m
-sCoE_x = 1; %m
-sCoE_y = 1; %m
-sCoE_z = 3; %m
-hCoE_x = 1; %m
-hCoE_y = 1; %m
-hCoE_z = 1; %m
-kCoE_x = 1; %m
-kCoE_y = 1; %m
-kCoE_z = 1; %m
-sCoE = [sCoE_x;sCoE_y;sCoE_z];
-rCoE = [rCoE_x;rCoE_y;rCoE_z];
-hCoE = [hCoE_x;hCoE_y;rCoE_z];
-x_sm = norm(sCoE);
+x_r = 0.1; %m
+y_r = 0.1; %m
+z_r = 0.3; %m
+x_s = 1; %m
+y_s = 1; %m
+z_s = 3; %m
+x_h = 1; %m
+y_h = 1; %m
+z_h = 1; %m
+x_k = 1; %m
+y_k = 1; %m
+z_k = 1; %m
+xyz_s = [x_s;y_s;z_s];
+xyz_r = [x_r;y_r;z_r];
+xyz_h = [x_h;y_h;z_r];
+x_sm = norm(xyz_s);
 heel_const = 1; %testing?
 a_right = 1; % Quatratic righting coeficient
 b_right = 1; % Linear righting coefficient
@@ -56,18 +56,18 @@ k1 = 1; %lift/drag const (This can be tuned)
 waterline_vol = 2; %m^3  This might have to be a function of roll
 added_mass = waterline_vol * rho_w /2; %
 
-zkeel =1 %center of effort bugbc
-xkeel =1 %center of effort
-zheel = 1
-xheel = 1
+z_k =1 %center of effort bugbc
+x_k =1 %center of effort
+z_h = 1
+x_h = 1
 
 %% define modular blocks
 %define M
 M_rb = [m 0 0 0;
         0 m 0 0;
         0 0 I_xx -I_xz;
-        0 0 -I_xz I_zz]; %bugbc Ixz used to be 0
-M_add = diag(added_mass*ones(1,4));% bugbc comeback to added mass
+        0 0 -I_xz I_zz]; %bugbc check if Ixz = 0
+M_add = diag(added_mass*ones(1,4));% bugbc double check that this approximation is right
 M = M_rb + M_add; 
 
 %define C
@@ -110,8 +110,8 @@ R2 = [1, 0, 0;
 v_tw_n = [v_tw*cos(alpha_tw); v_tw*sin(alpha_tw); 0];
 v_tw_b = R2*R1*v_tw_n;
 
-v_aw_b = [v_tw*cos(alpha_tw-psi)-surge+yaw*sCoE_y;
-    v_tw*sin(alpha_tw-psi)*cos(phi)-sway+yaw*sCoE_x+roll*sCoE_z;
+v_aw_b = [v_tw*cos(alpha_tw-psi)-surge+yaw*y_s;
+    v_tw*sin(alpha_tw-psi)*cos(phi)-sway+yaw*x_s+roll*z_s;
     0];
 
 v_aw = norm(v_aw_b);
@@ -119,18 +119,18 @@ alpha_aw = atan2(v_aw_b(2),-v_aw_b(1));
 alpha_s = alpha_aw - sangle;
 
 %Rudder (b-frame)
-v_ar_b = [-surge + yaw*rCoE_y; -sway - yaw*rCoE_x + roll*rCoE_z; 0];
+v_ar_b = [-surge + yaw*y_r; -sway - yaw*x_r + roll*z_r; 0];
 v_ar = norm(v_ar_b);
 alpha_ar = atan2(v_ar_b(2),-v_ar_b(1));
 alpha_r = alpha_ar - rangle;
 
 %Keel (b-frame)
-v_ak_b = [-surge + yaw*kCoE_y; -sway - yaw*kCoE_x + roll*kCoE_z; 0];
+v_ak_b = [-surge + yaw*y_k; -sway - yaw*x_k + roll*z_k; 0];
 v_ak = norm(v_ak_b);
 alpha_ak = atan2(v_ak_b(2),-v_ak_b(1));
 
 %Hull (n-frame)
-v_ah_n = [-surge + yaw*hCoE_y; sec(phi)*(-sway - yaw*hCoE_x + roll*hCoE_z); 0];
+v_ah_n = [-surge + yaw*y_h; sec(phi)*(-sway - yaw*x_h + roll*z_h); 0];
 v_ah = norm(v_ah_n);
 alpha_ah = atan2(v_ah_n(2),-v_ah_n(1));
 
@@ -141,8 +141,8 @@ alpha_ah = atan2(v_ah_n(2),-v_ah_n(1));
  % bugbc! missing D_h is wrong
  D_h = [Frh(v_ah)*cos(alpha_ah);
      -Frh(v_ah)*sin(alpha_ah)*cos(phi);
-     (-Frh(v_ah)*sin(alpha_ah)*cos(phi))*abs(zheel);
-     Frh(v_ah)*sin(alpha_ah)*cos(phi)*abs(xheel);
+     (-Frh(v_ah)*sin(alpha_ah)*cos(phi))*abs(z_h);
+     Frh(v_ah)*sin(alpha_ah)*cos(phi)*abs(x_h);
  ];
 
 liftk=lift(rho_w,A_h,v_ak,alpha_ak);
@@ -150,8 +150,8 @@ dragk=drag(rho_w,A_h,v_ak,alpha_ak);
 
  D_k = [-liftk*sin(alpha_ak)+dragk*cos(alpha_ak);
      -liftk*cos(alpha_ak)-dragk*sin(alpha_ak);
-     (-liftk*cos(alpha_ak)-dragk*sin(alpha_ak))*abs(zkeel);
-     (liftk*cos(alpha_ak)+dragk*sin(alpha_ak))*abs(xkeel);
+     (-liftk*cos(alpha_ak)-dragk*sin(alpha_ak))*abs(z_k);
+     (liftk*cos(alpha_ak)+dragk*sin(alpha_ak))*abs(x_k);
  ]
 
 D_heel = [0;
@@ -170,13 +170,13 @@ D = D_heel + D_h + D_yaw+D_k;
 
 T_s = [lift(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw)-drag(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw);
     lift(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw)+drag(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw);
-    (lift(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw)+drag(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw))*abs(sCoE_z);
+    (lift(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw)+drag(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw))*abs(z_s);
     -(lift(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw)-drag(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw))*x_sm*sin(sangle) + (lift(rho_a,A_s,v_aw,alpha_s)*cos(alpha_aw)+drag(rho_a,A_s,v_aw,alpha_s)*sin(alpha_aw))*(x_m-x_sm*cos(sangle))];
 % Rudder Forces
 T_r = [-drag(rho_w,A_r,v_ar,alpha_r);
     lift(rho_w,A_r,v_ar,alpha_r);
-    lift(rho_w,A_r,v_ar,alpha_r)*abs(rCoE_z);
-    -lift(rho_w,A_r,v_ar,alpha_r)*abs(rCoE_x)];
+    lift(rho_w,A_r,v_ar,alpha_r)*abs(z_r);
+    -lift(rho_w,A_r,v_ar,alpha_r)*abs(x_r)];
                  
 T = T_s + T_r;
 
