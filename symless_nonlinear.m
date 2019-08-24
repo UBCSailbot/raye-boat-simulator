@@ -169,8 +169,8 @@ alpha_ah = atan2(v_ah_n(2),-v_ah_n(1));
      Frh(v_ah)*sin(alpha_ah)*cos(phi)*abs(x_h);
  ];
 
-liftk=lift(rho_w,A_h,v_ak,alpha_ak);
-dragk=drag(rho_w,A_h,v_ak,alpha_ak);
+liftk=lift(rho_w,A_k,v_ak,alpha_ak);
+dragk=drag(rho_w,A_k,v_ak,alpha_ak);
 
 % p.5 left
  D_k = [-liftk*sin(alpha_ak) + dragk*cos(alpha_ak);

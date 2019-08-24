@@ -10,7 +10,7 @@ I_xz= 100; %kg m^2
 A_s = 12.06384791749; %m^2 area of sail
 A_r = 1; %m^2 area of rudder
 A_h = 1; %m^2 area of hull
-A_k = 1; %m^2 area of keel
+A_k = 1; %m^2 area of keel TODO: figure out if use A_h or A_k for keel lift/drag, only use one, guess A_k for now, maybe A_h in F_rh
 
 %% Mast location
 x_m = 0.5; %m x-coord of mast in b-frame
