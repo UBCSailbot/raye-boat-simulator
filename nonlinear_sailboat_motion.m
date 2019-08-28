@@ -106,7 +106,13 @@ alpha_s = alpha_aw - sangle;
 %Rudder (b-frame)
 v_ar_b = [-surge + yaw*rCoE_y; -sway - yaw*rCoE_x + roll*rCoE_z; 0];
 v_ar = norm(v_ar_b);
-v_ar_b_norm = v_ar_b./v_ar;
+if v_ar ~= 0
+    v_ar_b_norm = v_ar_b./v_ar;
+else
+    v_ar_b_norm = [0;
+                   0;
+                   0];
+end
 alpha_ar = atan2(v_ar_b_norm(2),-v_ar_b_norm(1));
 alpha_r = alpha_ar - rangle;
 
