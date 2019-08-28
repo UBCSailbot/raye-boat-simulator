@@ -35,7 +35,7 @@ xyz_h = [x_h;y_h;z_h];  % CoE hull
 x_sm = norm(xyz_s);
 
 %% Force constants
-a_right = 0.01; % same as a in paper Quatratic righting coeficient
+a_right = 0.5; % same as a in paper Quatratic righting coeficient
 b_right = 1; % same as b in paper Linear righting coefficient
 
 c_heel = 1;  % same as c in paper
