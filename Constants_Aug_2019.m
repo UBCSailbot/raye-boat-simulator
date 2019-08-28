@@ -7,13 +7,6 @@ I_xx = 100; % kg*m^2, moment of inertia
 I_zz = 100; % kg*m^2
 I_xz = 100; % kg*m^2
 
-M_rb = [m 0   0     0;
-        0 m   0     0;
-        0 0  I_xx -I_xz;
-        0 0 -I_xz I_zz]; %bugbc check if Ixz = 0
-M_add = diag(added_mass*ones(1,4)); % bugbc double check that this approximation is right: p.6 left M_A = -diag{X_u_dot, Y_v_dot, K_p_dot, N_r_dot}, on p.3 it says M_A is stricly positive 
-M = M_rb + M_add; 
-
 %% Areas
 A_s = 12.06384791749; % m^2, area of sail
 A_r = 1; % m^2, area of rudder
@@ -42,7 +35,7 @@ xyz_h = [x_h;y_h;z_h];  % CoE hull
 x_sm = norm(xyz_s);
 
 %% Force constants
-a_right = 1; % same as a in paper Quatratic righting coeficient
+a_right = 0.01; % same as a in paper Quatratic righting coeficient
 b_right = 1; % same as b in paper Linear righting coefficient
 
 c_heel = 1;  % same as c in paper
@@ -60,3 +53,10 @@ rho_w = 997; % kg/m^3, density of water
 rho_a = 1.225; % kg/m^3, density of air
 waterline_vol = 2; % m^3  This might have to be a function of roll
 added_mass = waterline_vol * rho_w /2; % Added mass phenomena <-not sure where this is from
+
+M_rb = [m 0   0     0;
+        0 m   0     0;
+        0 0  I_xx -I_xz;
+        0 0 -I_xz I_zz]; %bugbc check if Ixz = 0
+M_add = diag(added_mass*ones(1,4)); % bugbc double check that this approximation is right: p.6 left M_A = -diag{X_u_dot, Y_v_dot, K_p_dot, N_r_dot}, on p.3 it says M_A is stricly positive 
+M = M_rb + M_add; 
