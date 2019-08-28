@@ -8,6 +8,26 @@ To build an MPC controller we need to first build a boat mathematical model that
 
 The model input variables that we control are the rudder and sail angle of the boat. The model input variables that we don't control are the wind speed and direction. The state variables that we care about are the boats x-y position and roll-yaw angle, as well as their derivatives. We ignore the z position and pitch angle in this model.
 
+# Quick Start Instructions (working as of Aug 2019)
+
+1. Install MATLAB and Simulink. This is free for UBC students, with instructions [here](https://it.ubc.ca/services/desktop-print-services/software-licensing/matlab). Note: for Linux, this is a bit more complicated. Contact Tyler Lum if you have any issues setting it up.
+
+2. Clone the repository `git clone https://github.com/UBCSailbot/boat-simulator.git`
+
+3. Open MATLAB and find the folder to `boat-simulator` that you just cloned (folders shown on left)
+
+4. Find `Constants_Aug_2019.m` and run the script. This loads the constants of the Simulink model into your workspace. Please keep this file updated to match `Simulink_models/Assemble_Blocks_Aug_24.slx`. If it tells you it can't run from where you are, always choose Move to Folder, not Add to Path. If you do not run this, the Simulink model will complain that its variables are undefined.
+
+5. Find `Simulink_models/sailbot_library.slx` and double click it. If there are any issues with this, install the toolboxes needed to get this open. This opens the library that has the Simulink blocks that we defined. This is where all the equations from the paper are defined. If there are any bugs in the system, it is likely contained in these blocks. Please note that if you change a block here, it automatically changes the same blocks used in `Simulink_models/Assemble_Blocks_Aug_24.slx`. Please make all equation related blocks and block changes here. Note: you need to unlock the library to make changes (try to change something. A warning will pop up and click the unlock library link in the warning). If you do not run this line, the Simulink model will complain that it cannot find the blocks. If you would like to investigate a block, double click on it to see what is inside.
+
+6. Find `Simulink_models/Assemble_Blocks_Aug_24.slx` and double click it. If there are any issues with this, install the toolboxes needed to get this open. This opens the Simulink library that assembles the blocks from `Simulink_models/sailbot_library.slx`. If there are any bugs connecting blocks, they will be here. If there is an error related to a block, please make the change in `Simulink_models/sailbot_library.slx`, not here. This will make your changes save in a more reliable way. Depending on the state of the system, you may need to double click on the blocks to see what is inside of them. 
+
+7. To run, ensure that `rangle, sangle, v_tw, alpha_tw` are set to appropriate constants or functions (if not, click anywhere in background, write "constant" ENTER to make a constant block. Connect this with the variable). Ensure that the outputs of the system you want to view have scopes at the end (if not, click anywhere in background, write "scope" ENTER to make a scope block. Connect this with the output). Then define how long the model should run in the middle of the top bar. Then press the green start button to start. From there, you can double click the scopes on the right to view a plot of their values.  
+
+8. Review `symless_nonlinear.m` to understand what the Simulink blocks should be doing and see the page numbers that the equations correspond to in Jouffroy paper. Review the Jouffroy paper in this repository if you need more detailed information. Confirm that the paper matches `symless_nonlinear.m` and `symless_nonlinear.m` matches `Simulink_models/Assemble_Blocks_Aug_24.slx`. 
+
+9. Continuously update `Simulink_models/Assemble_Blocks_Aug_24.slx`, `Simulink_models/sailbot_library.slx`, `symless_nonlinear.m`, and `Constants_Aug_2019.m`. Eventually make new files with newer dates. Binary files are hard to understand diffs, so nicer to make new files once in a while.
+
 # Description
 
 As of Aug 2019, we have had the following design changes.
@@ -17,6 +37,13 @@ As of Aug 2019, we have had the following design changes.
 * Next, we created `symless_nonlinear.m` to recreate what was done in `nonlinear_sailboat_motion.m`, but without the Symbolic Toolbox (Bruce and Tyler). This was in hopes of solving the division by zero problem and then debugging from there. This solution still encountered many issues and was not easy to debug, visualize or improve.
 
 * Next, we created `sailbot_library.slx`, which contains Simulink blocks that match the equations of `symless_nonlinear.m`. Then we assembled the blocks in `Simulink_models/Assemble_Blocks_Aug_24.slx`, and then began debugging the system. So far, the division by zero issue seems to be gone, but the boat is still unstable. We are hoping to figure out the cause of the problems and then work from there (eg. sign error, parameter estimate issues, lift/drag/F_rh approximation errors, etc.)
+
+# Variables
+
+There are many variables in this complicated model. While the Jouffroy paper does a good job explaining the varibles, it is long and overwhelming to read and understand. Here, I will define the variables more clearly and highlight some easy misunderstandings (as of Aug 2019):
+
+* 
+
 
 ## Old Message in README
 
