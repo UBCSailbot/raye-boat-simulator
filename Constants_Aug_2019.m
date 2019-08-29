@@ -14,21 +14,21 @@ A_h = 1; % m^2, area of hull
 A_k = 1; % m^2, area of keel TODO: figure out if use A_h or A_k for keel lift/drag, only use one, guess A_k for now, maybe A_h in F_rh
 
 %% Mast location
-x_m = 0.5; % m, x-coord of mast in b-frame
+x_m = 0.1; % m, x-coord of mast in b-frame
 
 %% Center of Efforts
 x_r = 0.1; % m 
-y_r = 0.1; % m
+y_r = 0; % m
 z_r = 0.3; % m
-x_s = 1; % m
-y_s = 1; % m
-z_s = 3; % m
-x_h = 1; % m
-y_h = 1; % m
-z_h = 1; % m
-x_k = 1; % m
-y_k = 1; % m
-z_k = 1; % m
+x_s = 0.1; % m
+y_s = 0; % m
+z_s = 0.1; % m
+x_h = 0.1; % m
+y_h = 0; % m
+z_h = 0.1; % m
+x_k = 0.2; % m
+y_k = 0; % m
+z_k = 0.2; % m
 xyz_s = [x_s;y_s;z_s];  % CoE sail
 xyz_r = [x_r;y_r;z_r];  % CoE rudder
 xyz_h = [x_h;y_h;z_h];  % CoE hull
@@ -38,8 +38,8 @@ x_sm = norm(xyz_s);
 a_right = 0.5; % same as a in paper Quatratic righting coeficient
 b_right = 1; % same as b in paper Linear righting coefficient
 
-c_heel = 1;  % same as c in paper
-d_yaw = 1;   % same as d in paper
+c_heel = 100;  % same as c in paper
+d_yaw = 10000;   % same as d in paper
 
 %% Lift and Drag Constants
 k_drag = 1; % drag const (Not defined in paper)
