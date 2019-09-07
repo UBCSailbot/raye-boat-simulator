@@ -20,7 +20,19 @@ The model input variables that we control are the rudder and sail angle of the b
 
 5. Find `Simulink_models/sailbot_library.slx` and double click it. If there are any issues with this, install the toolboxes needed to get this open. This opens the library that has the Simulink blocks that we defined. This is where all the equations from the paper are defined. If there are any bugs in the system, it is likely contained in these blocks. Please note that if you change a block here, it automatically changes the same blocks used in `Simulink_models/Assemble_Blocks_Aug_24.slx`. Please make all equation related blocks and block changes here. Note: you need to unlock the library to make changes (try to change something. A warning will pop up and click the unlock library link in the warning). If you do not run this line, the Simulink model will complain that it cannot find the blocks. If you would like to investigate a block, double click on it to see what is inside.
 
+![Sailbot library](images/Sailbot_Library.png)
+
+_sailbot_library.slx as of Aug 2019_
+
 6. Find `Simulink_models/Assemble_Blocks_Aug_24.slx` and double click it. If there are any issues with this, install the toolboxes needed to get this open. This opens the Simulink library that assembles the blocks from `Simulink_models/sailbot_library.slx`. If there are any bugs connecting blocks, they will be here. If there is an error related to a block, please make the change in `Simulink_models/sailbot_library.slx`, not here. This will make your changes save in a more reliable way. Depending on the state of the system, you may need to double click on the blocks to see what is inside of them. 
+
+![Assemble Blocks](images/Assemble_Blocks_Aug_24.png)
+
+_Assemble_Blocks_Aug_24.slx as of Aug 2019_
+
+![Inside Assemble Blocks](images/Inside_Assemble_Blocks_Aug_24.png)
+
+_Inside Assemble_Blocks_Aug_24.slx as of Aug 2019_
 
 7. To run, ensure that `rangle, sangle, v_tw, alpha_tw` are set to appropriate constants or functions (if not, click anywhere in background, write "constant" ENTER to make a constant block. Connect this with the variable). Ensure that the outputs of the system you want to view have scopes at the end (if not, click anywhere in background, write "scope" ENTER to make a scope block. Connect this with the output). Then define how long the model should run in the middle of the top bar. Then press the green start button to start. From there, you can double click the scopes on the right to view a plot of their values.  
 
