@@ -1,3 +1,14 @@
+%% Simulink_Python_Communcation.m
+% % Simple script to get Simulink Model => MATLAB Script => Python Script => Gazebo
+% % Full instructions:
+% % 
+% % 1. Install MATLAB, Simulink and Python
+% % 2. Install ROS, Gazebo and VRX (https://bitbucket.org/osrf/vrx/wiki/tutorials/SystemSetupInstall)
+% % 3. Run roslaunch vrx_gazebo sandisland.launch (may need to run source ~/vrx_ws/devel/setup.bash first). Pause the simulation
+% % 4. Run Simulink_Python_Communcation.m
+% % 5. Run python simulink_to_gazebo_pose.py from cmd line
+% % 6. View Gazebo to see the boat moving
+
 % Clear and reset
 clc;
 clear;
