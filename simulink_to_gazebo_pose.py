@@ -58,12 +58,6 @@ def tcp_sim():
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
 
-        # Send control signal back to simulink
-        control_signal = 1
-        s = str(control_signal)
-        sock.send(s)
-        print("***")
-
     sock.close()
 
 def euler_to_quaternion(roll, pitch, yaw):

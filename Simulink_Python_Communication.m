@@ -6,7 +6,7 @@ close all;
 % Constants
 sim_time_step = 0.0001;
 
-% Open Example Simulink Model
+% Open Simulink Model
 Constants_Aug_2019
 open_system('Simulink_models/sailbot_library.slx')
 open_system('Simulink_models/Assemble_Blocks_Aug_24.slx')
@@ -18,28 +18,34 @@ set_param('Assemble_Blocks_Aug_24','SimulationCommand','start','SimulationComman
 s = tcpip('127.0.0.1', 54320,  'NetworkRole', 'server');
 fopen(s);
 
+% Wait for start command from Python
+while(1)
+    nBytes = get(s,'BytesAvailable');
+    if nBytes>0
+        break;
+    end
+end
+
 % main loop
 while(1)  
-    while(1) %loop, until read some data
-        nBytes = get(s,'BytesAvailable');
-        if nBytes>0
-            break;
-        end
-    end
+
     
     % run the simulink model for a step
     set_param(gcs, 'SimulationCommand', 'step');  
     
-    % puase the simulink model and send some data to python
+    % pause the simulink model and send some data to python
     pause(sim_time_step);
     
+    % Get block objects
     x_block = get_param('Assemble_Blocks_Aug_24/x_dot_to_x', 'RuntimeObject');
     y_block = get_param('Assemble_Blocks_Aug_24/y_dot_to_y', 'RuntimeObject');
     phi_block = get_param('Assemble_Blocks_Aug_24/phi_dot_to_phi', 'RuntimeObject');
     psi_block = get_param('Assemble_Blocks_Aug_24/psi_dot_to_psi', 'RuntimeObject');
+    
     if or(or(isempty(x_block), isempty(y_block)), or(isempty(phi_block), isempty(psi_block)))
         continue
     else
+        % Get useful variables
         x = x_block.OutputPort(1).Data;
         y = y_block.OutputPort(1).Data;
         phi = phi_block.OutputPort(1).Data;
@@ -53,6 +59,7 @@ while(1)
         u = [x, y, phi, psi, x_dot, y_dot, phi_dot, psi_dot]
     end
     
+    % Send information to Python
     fwrite(s, jsonencode(u));
     
 end
