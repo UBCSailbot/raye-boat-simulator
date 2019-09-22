@@ -1,15 +1,15 @@
 % Define constants
 
 %% Mass and inertia
-m = 1000; % kg, mass of boat
+m = 60; % kg, mass of boat
 
 I_xx = 100; % kg*m^2, moment of inertia
 I_zz = 100; % kg*m^2
-I_xz = 100; % kg*m^2
+I_xz = 0; % kg*m^2
 
 %% Areas
-A_s = 12.06384791749; % m^2, area of sail
-A_r = 1; % m^2, area of rudder
+A_s = 7.06; % m^2, area of sail
+A_r = 0.3; % m^2, area of rudder
 A_h = 1; % m^2, area of hull
 A_k = 1; % m^2, area of keel TODO: figure out if use A_h or A_k for keel lift/drag, only use one, guess A_k for now, maybe A_h in F_rh
 
@@ -17,18 +17,18 @@ A_k = 1; % m^2, area of keel TODO: figure out if use A_h or A_k for keel lift/dr
 x_m = 0.1; % m, x-coord of mast in b-frame
 
 %% Center of Efforts
-x_r = 0.1; % m 
+x_r = -3; % m 
 y_r = 0; % m
 z_r = 0.3; % m
-x_s = 0.1; % m
+x_s = 0; % m
 y_s = 0; % m
-z_s = 0.1; % m
-x_h = 0.1; % m
+z_s = -2; % m
+x_h = 0; % m
 y_h = 0; % m
-z_h = 0.1; % m
-x_k = 0.2; % m
+z_h = 0; % m
+x_k = 0; % m
 y_k = 0; % m
-z_k = 0.2; % m
+z_k = 0.7; % m
 xyz_s = [x_s;y_s;z_s];  % CoE sail
 xyz_r = [x_r;y_r;z_r];  % CoE rudder
 xyz_h = [x_h;y_h;z_h];  % CoE hull
@@ -42,8 +42,8 @@ c_heel = 100;  % same as c in paper
 d_yaw = 10000;   % same as d in paper
 
 %% Lift and Drag Constants
-k_drag = 1; % drag const (Not defined in paper)
-k_lift= 1; % lift const (Not defined in paper)
+k_drag = 0.2; % drag const (Not defined in paper)
+k_lift= 0.2; % lift const (Not defined in paper)
 k_rh = 1; % Frh const (Not defined in paper)
 
 %% Added mass
