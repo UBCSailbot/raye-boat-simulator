@@ -52,6 +52,10 @@ while(1)
     y_block = get_param('Assemble_Blocks_Aug_24/y_dot_to_y', 'RuntimeObject');
     phi_block = get_param('Assemble_Blocks_Aug_24/phi_dot_to_phi', 'RuntimeObject');
     psi_block = get_param('Assemble_Blocks_Aug_24/psi_dot_to_psi', 'RuntimeObject');
+    sangle_block = get_param('Assemble_Blocks_Aug_24/sangle_block', 'RuntimeObject');
+    rangle_block = get_param('Assemble_Blocks_Aug_24/rangle_block', 'RuntimeObject');
+    v_tw_block = get_param('Assemble_Blocks_Aug_24/v_tw_block', 'RuntimeObject');
+    alpha_tw_block = get_param('Assemble_Blocks_Aug_24/alpha_tw_block', 'RuntimeObject');
     
     if or(or(isempty(x_block), isempty(y_block)), or(isempty(phi_block), isempty(psi_block)))
         continue
@@ -67,7 +71,9 @@ while(1)
         phi_dot = phi_block.InputPort(1).Data;
         psi_dot = psi_block.InputPort(1).Data;
         
-        u = [x, y, phi, psi, x_dot, y_dot, phi_dot, psi_dot]
+        sangle = sangle_block.OutputPort(1).Data;
+        
+        u = [x, y, phi, psi, x_dot, y_dot, phi_dot, psi_dot, sangle]
     end
     
     % Send information to Python

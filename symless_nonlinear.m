@@ -219,6 +219,3 @@ T = T_s + T_r;
 v_dot = -inv(M)*C*vss-inv(M)*D-inv(M)*g+inv(M)*T;
 
 
-
-
-
