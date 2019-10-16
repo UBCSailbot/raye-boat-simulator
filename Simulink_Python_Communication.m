@@ -18,12 +18,12 @@ close all;
 sim_time_step = 0.0001;
 
 % Open Simulink Model
-Constants_Aug_2019
+Constants_Oct_15_2019
 open_system('Simulink_models/sailbot_library.slx')
-open_system('Simulink_models/Assemble_Blocks_Aug_24.slx')
+open_system('Simulink_models/Assemble_Blocks_Oct_15.slx')
 
 % start the simulation and pause the simulation, waiting for signal from python
-set_param('Assemble_Blocks_Aug_24','SimulationCommand','start','SimulationCommand','pause');
+set_param('Assemble_Blocks_Oct_15','SimulationCommand','start','SimulationCommand','pause');
 
 % open a server, it will block until a client connect to it
 s = tcpip('127.0.0.1', 54320,  'NetworkRole', 'server');
@@ -38,9 +38,7 @@ while(1)
 end
 
 % main loop
-while(1)  
-
-    
+while(1)     
     % run the simulink model for a step
     set_param(gcs, 'SimulationCommand', 'step');  
     
@@ -48,15 +46,17 @@ while(1)
     pause(sim_time_step);
     
     % Get block objects
-    x_block = get_param('Assemble_Blocks_Aug_24/x_dot_to_x', 'RuntimeObject');
-    y_block = get_param('Assemble_Blocks_Aug_24/y_dot_to_y', 'RuntimeObject');
-    phi_block = get_param('Assemble_Blocks_Aug_24/phi_dot_to_phi', 'RuntimeObject');
-    psi_block = get_param('Assemble_Blocks_Aug_24/psi_dot_to_psi', 'RuntimeObject');
-    sangle_block = get_param('Assemble_Blocks_Aug_24/sangle_block', 'RuntimeObject');
-    rangle_block = get_param('Assemble_Blocks_Aug_24/rangle_block', 'RuntimeObject');
-    v_tw_block = get_param('Assemble_Blocks_Aug_24/v_tw_block', 'RuntimeObject');
-    alpha_tw_block = get_param('Assemble_Blocks_Aug_24/alpha_tw_block', 'RuntimeObject');
+    x_block = get_param('Assemble_Blocks_Oct_15/x_dot_to_x', 'RuntimeObject');
+    y_block = get_param('Assemble_Blocks_Oct_15/y_dot_to_y', 'RuntimeObject');
+    phi_block = get_param('Assemble_Blocks_Oct_15/phi_dot_to_phi', 'RuntimeObject');
+    psi_block = get_param('Assemble_Blocks_Oct_15/psi_dot_to_psi', 'RuntimeObject');
+    sangle_block = get_param('Assemble_Blocks_Oct_15/sangle_block', 'RuntimeObject');
+    rangle_block = get_param('Assemble_Blocks_Oct_15/rangle_block', 'RuntimeObject');
+    v_tw_block = get_param('Assemble_Blocks_Oct_15/v_tw_block', 'RuntimeObject');
+    alpha_tw_block = get_param('Assemble_Blocks_Oct_15/alpha_tw_block', 'RuntimeObject');
     
+    % Incomplete: handle case where there is bad data, which crashes
+    % simulation
     if or(or(isempty(x_block), isempty(y_block)), or(isempty(phi_block), isempty(psi_block)))
         continue
     else
@@ -72,8 +72,11 @@ while(1)
         psi_dot = psi_block.InputPort(1).Data;
         
         sangle = sangle_block.OutputPort(1).Data;
+        rangle = rangle_block.OutputPort(1).Data;
+        v_tw = v_tw_block.OutputPort(1).Data;
+        alpha_tw = alpha_tw_block.OutputPort(1).Data;
         
-        u = [x, y, phi, psi, x_dot, y_dot, phi_dot, psi_dot, sangle]
+        u = [x, y, phi, psi, x_dot, y_dot, phi_dot, psi_dot, sangle, rangle, v_tw, alpha_tw]
     end
     
     % Send information to Python
