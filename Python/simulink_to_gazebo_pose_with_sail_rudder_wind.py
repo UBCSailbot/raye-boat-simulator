@@ -144,7 +144,6 @@ def get_updated_wind_state_msg(wind_msg, model_and_joint_pose, wind):
     return wind_msg
 
 def euler_to_quaternion(roll, pitch, yaw):
-
     qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
     qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
     qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
@@ -156,19 +155,20 @@ def get_updated_joint_positions(model_and_joint_pose):
     return [model_and_joint_pose.sangle, model_and_joint_pose.rangle]
 
 ######################### DATATYPES ######################### 
+# Note: need to change coordinate frame (Gazebo XYZ=NWU, Simulink XYZ=NED) (N = North, W = West, E = East, U = Up, D = Down)
 class ModelAndJointPose:
     def __init__(self, loaded_buf):
         self.x = loaded_buf[0]
-        self.y = loaded_buf[1]
+        self.y = -loaded_buf[1]
         self.phi = loaded_buf[2]
-        self.psi = loaded_buf[3]
-        self.sangle = loaded_buf[4]
-        self.rangle = loaded_buf[5]
+        self.psi = -loaded_buf[3]
+        self.sangle = -loaded_buf[4]
+        self.rangle = -loaded_buf[5]
 
 class Wind:
     def __init__(self, loaded_buf):
         self.v_tw = loaded_buf[6]
-        self.alpha_tw = loaded_buf[7]
+        self.alpha_tw = -loaded_buf[7]
 
 class Quaternion:
     def __init__(self, qx, qy, qz, qw):
