@@ -104,19 +104,19 @@ The following are functions that are complete approximations, might need some in
 
 * F_rh = v_ah^2
 
-## How to Run Simulation with VRX Gazebo Visualization (Experimental Sept 2019)
+## How to Run Simulation with VRX Gazebo Visualization (Experimental Oct 2019)
 
-The Simulink plots work, but it can be hard to truly understand what a 3D boat is doing just by looking at 8 plots. Here are the instructions to setup and run the boat visualization tool. Note: This is experimental and currently only visualizes the data in Gazebo, without any simulation dynamics. Eg. The simulator just for looks. We plan to use Gazebo's physics simulations to test our model in the future.
+The Simulink plots work, but it can be hard to truly understand what a 3D boat is doing just by looking at 8 plots. Here are the instructions to setup and run the boat visualization tool. Note: This is experimental and currently only visualizes the data in Gazebo, without any simulation dynamics. Eg. The simulator is just for looks. We plan to use Gazebo's physics simulations to test our model in the future.
 
-1. Install VRX Gazebo. This is best done on Ubuntu 18.04, though potentially possible on Ubuntu 16.04. To do so, please follow the instructions [here](https://bitbucket.org/osrf/vrx/wiki/tutorials/SystemSetupInstall). This installs ROS, Gazebo, and VRX.
+1. Install VRX Gazebo. This is best done on Ubuntu 18.04, though potentially possible on Ubuntu 16.04. To do so, please follow the instructions [here](https://bitbucket.org/osrf/vrx/wiki/tutorials/SystemSetupInstall). This installs ROS, Gazebo, and VRX. Be sure to follow "Option 2: Build VRX from source".
 
-2. Follow the above VRX instructions to run the simulation. The launch file is something like `roslaunch vrx_gazebo sandisland.launch`. Once the simulation starts, press the Pause button at the bottom left of the screen. This turns off the physics so we can simply display the positions over time without the Gazebo physics.
+2. Navigate to `vrx`, then run `hg update Sailbot`. Then run `cd ../../` or `cd ~/vrx_ws`, then run `catkin_make`. This uses our branch of vrx. Then run `source ~/vrx_ws/devel/setup.bash`, then `roslaunch vrx_gazebo sandisland.launch paused:=true`. This runs the simulation and pauses so we can simply display the positions over time without the Gazebo physics.
 
-3. Open MATLAB, enter the folder for boat-simulator, then run the script `Simulink_Python_Communication.m`. This clears the workspace variables, runs `Constants_Aug_2019.m` and then opens `sailbot_library.slx` and `Assemble_Blocks_Aug_24.slx`. Then it waits for Python to start.
+3. Open MATLAB, enter the folder for `boat-simulator`, then run the script `Simulink_Python_Communication.m`. This clears the workspace variables, runs `Constants_Oct_15_2019.m` and then opens `sailbot_library.slx` and `Assemble_Blocks_Oct_15.slx`. Then it waits for Python to start.
 
-4. Open a new terminal, change folder to `boat-simulator` then run `python simulink_to_gazebo_pose.py`, which tells the MATLAB script to start, then continuously gets the plot information from simulink, sets up a Gazebo message, then sends to it to Gazebo to show the correct position.
+4. Open a new terminal, change folder to `boat-simulator/Python` then run `python simulink_to_gazebo_pose_with_sail_rudder_wind.py`, which tells the MATLAB script to start, then continuously gets the plot information from simulink, sets up a Gazebo message, then sends to it to Gazebo to show the correct boat position, sail and rudder angle, and wind angle.
 
-Be sure to follow this order with running (eg. start Gazebo first, then start MATLAB script, then start Python script). Be sure to set the desired variables first in Simulink before starting. (Change initial conditions by double clicking on the integrator blocks and change the inputs by changing the values to `sangle`, `rangle`, `v_tw`, and `alpha_tw`.) Also change up the parameters in `Constants_Aug_2019.m`. If the speed goes too crazy in Gazebo, you may have to close and restart it.
+Be sure to follow this order with running (eg. start Gazebo first, then start MATLAB script, then start Python script). Be sure to set the desired variables first in Simulink before starting. (Change initial conditions by double clicking on the integrator blocks and change the inputs by changing the values to `sangle`, `rangle`, `v_tw`, and `alpha_tw`.) Also change up the parameters in `Constants_Oct_15_2019.m`. If the speed goes too crazy in Gazebo, you may have to close and restart it.
 
 ## Old Message in README
 
