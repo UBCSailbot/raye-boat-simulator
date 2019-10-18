@@ -120,7 +120,7 @@ Be sure to follow this order with running (eg. start Gazebo first, then start MA
 
 ![North](images/North.png)
 
-_Gazebo Simulation with Sail and Rudder, as well as wind direction arrow. This shows the direction of North (+ve x)._
+_Gazebo Simulation with Sail and Rudder, as well as wind direction arrow. The boat and camera are currently looking in the North direction (+ve x)._
 
 ## Old Message in README
 
