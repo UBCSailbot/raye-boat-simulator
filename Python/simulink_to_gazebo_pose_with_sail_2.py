@@ -13,21 +13,7 @@ from gazebo_msgs.srv import SetModelState
 from gazebo_msgs.srv import SetModelConfiguration
 import numpy as np
 
-class ModelAndJointPose:
-    def __init__(self, loaded_buf):
-        self.x = loaded_buf[0]
-        self.y = loaded_buf[1]
-        self.phi = loaded_buf[2]
-        self.psi = loaded_buf[3]
-        self.sangle = loaded_buf[4]
-        self.rangle = loaded_buf[5]
-
-class Quaternion:
-    def __init__(self, qx, qy, qz, qw):
-        self.x = qx
-        self.y = qy
-        self.z = qz
-        self.w = qw
+######################### MAIN METHOD ######################### 
 
 def main():
 
@@ -39,6 +25,7 @@ def main():
     boat_state_msg = ModelState()
     boat_state_msg.model_name = 'wamv'
 
+    ## Setup for SetModelState (set wind arrow pose)
     wind_state_msg = ModelState()
     wind_state_msg.model_name = 'post_0'
 
@@ -47,29 +34,28 @@ def main():
     urdf_param_name = 'robot_description'
     joint_names = ['sail_joint', 'rudder_joint']
 
-    count = 0
     while True:
-        count += 1
         # Get data
         buf = receive_data(sock)
         loaded_buf = load_data(buf)
 
         # Store data
         model_and_joint_pose = ModelAndJointPose(loaded_buf)
+        wind = Wind(loaded_buf)
 
         # Setup msgs to send to Gazebo
         boat_state_msg = get_updated_boat_state_msg(boat_state_msg, model_and_joint_pose)
         joint_positions = get_updated_joint_positions(model_and_joint_pose)
-        wind_state_msg = get_updated_wind_state_msg(wind_state_msg, model_and_joint_pose, -0.5)
+        wind_state_msg = get_updated_wind_state_msg(wind_state_msg, model_and_joint_pose, wind)
 
         # Set model pose and joint pose
         set_model_pose(boat_state_msg)
-        if count % 5 == 0:
-            set_model_pose(wind_state_msg)
+        set_model_pose(wind_state_msg)
         set_joint_pose(model_name, urdf_param_name, joint_names, joint_positions)
 
     sock.close()
 
+######################### HELPER METHODS ######################### 
 def create_socket():
     # Setup port and socket
     server_port=('127.0.0.1', 54320)
@@ -143,12 +129,13 @@ def get_updated_boat_state_msg(boat_msg, model_and_joint_pose):
 
     return boat_msg
 
-def get_updated_wind_state_msg(wind_msg, model_and_joint_pose, wind_alpha):
+def get_updated_wind_state_msg(wind_msg, model_and_joint_pose, wind):
+    height_above_boat = 5
     wind_msg.pose.position.x = model_and_joint_pose.x 
     wind_msg.pose.position.y = model_and_joint_pose.y 
-    wind_msg.pose.position.z = 5
+    wind_msg.pose.position.z = height_above_boat
 
-    q = euler_to_quaternion(0, 0, wind_alpha)
+    q = euler_to_quaternion(0, 0, wind.alpha_tw)
     wind_msg.pose.orientation.x = q.x 
     wind_msg.pose.orientation.y = q.y 
     wind_msg.pose.orientation.z = q.z 
@@ -167,6 +154,28 @@ def euler_to_quaternion(roll, pitch, yaw):
 
 def get_updated_joint_positions(model_and_joint_pose):
     return [model_and_joint_pose.sangle, model_and_joint_pose.rangle]
+
+######################### DATATYPES ######################### 
+class ModelAndJointPose:
+    def __init__(self, loaded_buf):
+        self.x = loaded_buf[0]
+        self.y = loaded_buf[1]
+        self.phi = loaded_buf[2]
+        self.psi = loaded_buf[3]
+        self.sangle = loaded_buf[4]
+        self.rangle = loaded_buf[5]
+
+class Wind:
+    def __init__(self, loaded_buf):
+        self.v_tw = loaded_buf[6]
+        self.alpha_tw = loaded_buf[7]
+
+class Quaternion:
+    def __init__(self, qx, qy, qz, qw):
+        self.x = qx
+        self.y = qy
+        self.z = qz
+        self.w = qw
 
 if __name__ == '__main__':
     rospy.init_node('set_pose')
