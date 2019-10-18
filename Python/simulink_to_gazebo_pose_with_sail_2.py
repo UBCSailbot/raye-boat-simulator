@@ -39,12 +39,17 @@ def main():
     boat_state_msg = ModelState()
     boat_state_msg.model_name = 'wamv'
 
+    wind_state_msg = ModelState()
+    wind_state_msg.model_name = 'post_0'
+
     ## Setup for SetModelConfiguration (set joint pose)
     model_name = 'wamv'
     urdf_param_name = 'robot_description'
     joint_names = ['sail_joint', 'rudder_joint']
 
+    count = 0
     while True:
+        count += 1
         # Get data
         buf = receive_data(sock)
         loaded_buf = load_data(buf)
@@ -55,9 +60,12 @@ def main():
         # Setup msgs to send to Gazebo
         boat_state_msg = get_updated_boat_state_msg(boat_state_msg, model_and_joint_pose)
         joint_positions = get_updated_joint_positions(model_and_joint_pose)
+        wind_state_msg = get_updated_wind_state_msg(wind_state_msg, model_and_joint_pose, -0.5)
 
         # Set model pose and joint pose
         set_model_pose(boat_state_msg)
+        if count % 5 == 0:
+            set_model_pose(wind_state_msg)
         set_joint_pose(model_name, urdf_param_name, joint_names, joint_positions)
 
     sock.close()
@@ -134,6 +142,19 @@ def get_updated_boat_state_msg(boat_msg, model_and_joint_pose):
     boat_msg.pose.orientation.w = q.w 
 
     return boat_msg
+
+def get_updated_wind_state_msg(wind_msg, model_and_joint_pose, wind_alpha):
+    wind_msg.pose.position.x = model_and_joint_pose.x 
+    wind_msg.pose.position.y = model_and_joint_pose.y 
+    wind_msg.pose.position.z = 5
+
+    q = euler_to_quaternion(0, 0, wind_alpha)
+    wind_msg.pose.orientation.x = q.x 
+    wind_msg.pose.orientation.y = q.y 
+    wind_msg.pose.orientation.z = q.z 
+    wind_msg.pose.orientation.w = q.w 
+
+    return wind_msg
 
 def euler_to_quaternion(roll, pitch, yaw):
 
