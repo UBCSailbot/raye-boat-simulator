@@ -66,17 +66,12 @@ while(1)
         phi = phi_block.OutputPort(1).Data;
         psi = psi_block.OutputPort(1).Data;
         
-        x_dot = x_block.InputPort(1).Data;
-        y_dot = y_block.InputPort(1).Data;
-        phi_dot = phi_block.InputPort(1).Data;
-        psi_dot = psi_block.InputPort(1).Data;
-        
         sangle = sangle_block.OutputPort(1).Data;
         rangle = rangle_block.OutputPort(1).Data;
         v_tw = v_tw_block.OutputPort(1).Data;
         alpha_tw = alpha_tw_block.OutputPort(1).Data;
         
-        u = [x, y, phi, psi, x_dot, y_dot, phi_dot, psi_dot, sangle, rangle, v_tw, alpha_tw]
+        u = [x, y, phi, psi, sangle, rangle, v_tw, alpha_tw]
     end
     
     % Send information to Python

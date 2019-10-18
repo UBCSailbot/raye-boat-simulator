@@ -13,9 +13,56 @@ from gazebo_msgs.srv import SetModelState
 from gazebo_msgs.srv import SetModelConfiguration
 import numpy as np
 
+class ModelAndJointPose:
+    def __init__(self, loaded_buf):
+        self.x = loaded_buf[0]
+        self.y = loaded_buf[1]
+        self.phi = loaded_buf[2]
+        self.psi = loaded_buf[3]
+        self.sangle = loaded_buf[4]
+        self.rangle = loaded_buf[5]
 
-def tcp_sim():
+class Quaternion:
+    def __init__(self, qx, qy, qz, qw):
+        self.x = qx
+        self.y = qy
+        self.z = qz
+        self.w = qw
 
+def main():
+
+    ## Create socket and start
+    sock = create_socket()
+    send_start_command(sock)
+
+    ## Setup for SetModelState (set model pose)
+    boat_state_msg = ModelState()
+    boat_state_msg.model_name = 'wamv'
+
+    ## Setup for SetModelConfiguration (set joint pose)
+    model_name = 'wamv'
+    urdf_param_name = 'robot_description'
+    joint_names = ['sail_joint', 'rudder_joint']
+
+    while True:
+        # Get data
+        buf = receive_data(sock)
+        loaded_buf = load_data(buf)
+
+        # Store data
+        model_and_joint_pose = ModelAndJointPose(loaded_buf)
+
+        # Setup msgs to send to Gazebo
+        boat_state_msg = get_updated_boat_state_msg(boat_state_msg, model_and_joint_pose)
+        joint_positions = get_updated_joint_positions(model_and_joint_pose)
+
+        # Set model pose and joint pose
+        set_model_pose(boat_state_msg)
+        set_joint_pose(model_name, urdf_param_name, joint_names, joint_positions)
+
+    sock.close()
+
+def create_socket():
     # Setup port and socket
     server_port=('127.0.0.1', 54320)
 
@@ -31,57 +78,62 @@ def tcp_sim():
     print("start a client")
     time.sleep(0.01)
 
+    return sock
+
+def send_start_command(sock):
     # Send start command
     s="start"
     sock.send(s)
     print(s)
 
-    boat_state_msg = ModelState()
-    boat_state_msg.model_name = 'wamv'
+def receive_data(sock):
+    # Receive data
+    buf = sock.recv(1000)
+    print("Received data:")
+    print(len(buf))
+    i = buf.index('[')
+    buf = buf[buf.index('['):]
+    buf = buf[:buf.index(']')] + ']'
+    print(len(buf))
+    print(buf)
+    print("***")
+    return buf
 
-    model_name = 'wamv'
-    urdf_param_name = 'robot_description'
-    joint_names = ['sail_joint']
+def load_data(buf):
+    # Load data
+    loaded_buf = json.loads(buf)
+    print("Loaded data:")
+    print(loaded_buf)
+    print("---")
+    return loaded_buf
 
-    while 1:
-        # Receive data
-        buf = sock.recv(1000)
-        print("Received data:")
-        print(len(buf))
-        i = buf.index('[')
-        buf = buf[buf.index('['):]
-        buf = buf[:buf.index(']')] + ']'
-        print(len(buf))
-        print(buf)
-        print("***")
-  
-        # Load data
-        buf_l = json.loads(buf)
-        print("Loaded data:")
-        print(buf_l)
-        print("---")
+def set_model_pose(boat_state_msg):
+    rospy.wait_for_service('/gazebo/set_model_state')
+    try:
+        set_boat_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+        resp = set_boat_state(boat_state_msg)
+    except rospy.ServiceException, e:
+        print "Service call failed: %s" % e
 
-        # Send gazebo control msg
-        boat_state_msg = get_updated_boat_state_msg(boat_state_msg, buf_l)
+def set_joint_pose(model_name, urdf_param_name, joint_names, joint_positions):
+    rospy.wait_for_service('/gazebo/set_model_configuration')
+    try:
+        set_boat_configuration = rospy.ServiceProxy('/gazebo/set_model_configuration', SetModelConfiguration)
+        resp = set_boat_configuration(model_name, urdf_param_name, joint_names, joint_positions)
+    except rospy.ServiceException, e:
+        print "Service call failed: %s" % e
 
-        print("moving boat in right away")
-        time.sleep(0.05)
-        rospy.wait_for_service('/gazebo/set_model_state')
-        try:
-            set_boat_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-            resp_1 = set_boat_state( boat_state_msg )
-        except rospy.ServiceException, e:
-            print "Service call failed: %s" % e
+def get_updated_boat_state_msg(boat_msg, model_and_joint_pose):
+    boat_msg.pose.position.x = model_and_joint_pose.x 
+    boat_msg.pose.position.y = model_and_joint_pose.y 
 
-        joint_positions = [buf_l[8]]
-        rospy.wait_for_service('/gazebo/set_model_configuration')
-        try:
-            set_boat_configuration = rospy.ServiceProxy('/gazebo/set_model_configuration', SetModelConfiguration)
-            resp_2 = set_boat_configuration(model_name, urdf_param_name, joint_names, joint_positions)
-        except rospy.ServiceException, e:
-            print "Service call failed: %s" % e
+    q = euler_to_quaternion(model_and_joint_pose.phi, 0, model_and_joint_pose.psi)
+    boat_msg.pose.orientation.x = q.x 
+    boat_msg.pose.orientation.y = q.y 
+    boat_msg.pose.orientation.z = q.z 
+    boat_msg.pose.orientation.w = q.w 
 
-    sock.close()
+    return boat_msg
 
 def euler_to_quaternion(roll, pitch, yaw):
 
@@ -90,28 +142,14 @@ def euler_to_quaternion(roll, pitch, yaw):
     qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
     qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
 
-    return [qx, qy, qz, qw]
+    return Quaternion(qx, qy, qz, qw)
 
-def get_updated_boat_state_msg(boat_msg, data):
-    boat_msg.pose.position.x = data[0]
-    boat_msg.pose.position.y = data[1]
-    boat_msg.pose.position.z = 0
-
-    q = euler_to_quaternion(data[2], 0, data[3])
-    boat_msg.pose.orientation.x = q[0]
-    boat_msg.pose.orientation.y = q[1]
-    boat_msg.pose.orientation.z = q[2]
-    boat_msg.pose.orientation.w = q[3]
-
-    boat_msg.twist.linear.x = data[4]
-    boat_msg.twist.linear.y = data[5]
-    boat_msg.twist.angular.x = data[6]
-    boat_msg.twist.angular.z = data[7]
-    return boat_msg
+def get_updated_joint_positions(model_and_joint_pose):
+    return [model_and_joint_pose.sangle, model_and_joint_pose.rangle]
 
 if __name__ == '__main__':
     rospy.init_node('set_pose')
     try:
-        tcp_sim()
+        main()
     except rospy.ROSInterruptException:
         pass
