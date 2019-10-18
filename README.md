@@ -118,6 +118,10 @@ The Simulink plots work, but it can be hard to truly understand what a 3D boat i
 
 Be sure to follow this order with running (eg. start Gazebo first, then start MATLAB script, then start Python script). Be sure to set the desired variables first in Simulink before starting. (Change initial conditions by double clicking on the integrator blocks and change the inputs by changing the values to `sangle`, `rangle`, `v_tw`, and `alpha_tw`.) Also change up the parameters in `Constants_Oct_15_2019.m`. If the speed goes too crazy in Gazebo, you may have to close and restart it.
 
+![North](images/North.png)
+
+_Gazebo Simulation with Sail and Rudder, as well as wind direction arrow. This shows the direction of North (+ve x)._
+
 ## Old Message in README
 
 Please go to the following link to view the repo in the google drive (temporary fix)
