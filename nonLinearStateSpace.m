@@ -41,65 +41,6 @@ J = [cos(psi) -sin(psi)*cos(phi)  0     0;
 %  
 % % p.4 left, vector linear+angular velocity in n-frame
 n_dot = J*vss;
-% 
-% % %% define constants
-% % m = 1000; % kg, mass of boat
-% % 
-% % I_xx = 100; % kg*m^2, moment of inertia
-% % I_zz = 100; % kg*m^2
-% % I_xz = 100; % kg*m^2
-% % 
-% % A_s = 12.06384791749; % m^2, area of sail
-% % A_r = 1; % m^2, area of rudder
-% % A_h = 1; % m^2, area of hull
-% % A_k = 1; % m^2, area of keel
-% % 
-% % x_m = 0.5; % m, x-coord of mast in b-frame
-% % 
-% % % Centers of Effort
-% % x_r = 0.1; % m 
-% % y_r = 0.1; % m
-% % z_r = 0.3; % m
-% % x_s = 1; % m
-% % y_s = 1; % m
-% % z_s = 3; % m
-% % x_h = 1; % m
-% % y_h = 1; % m
-% % z_h = 1; % m
-% % x_k = 1; % m
-% % y_k = 1; % m
-% % z_k = 1; % m
-% % xyz_s = [x_s;y_s;z_s];  % CoE sail
-% % xyz_r = [x_r;y_r;z_r];  % CoE rudder
-% % xyz_h = [x_h;y_h;z_h];  % CoE hull
-% % x_sm = norm(xyz_s);
-% % 
-% % a_right = 1; % same as a in paper Quatratic righting coeficient
-% % b_right = 1; % same as b in paper Linear righting coefficient
-% % 
-% % c_heel = 1;  % same as c in paper
-% % d_yaw = 1;   % same as d in paper
-% % 
-% % X_u_dot = 1; % Added mass phenomena
-% % Y_v_dot = 1; % 
-% % 
-% % rho_w = 997; % kg/m^3, density of water
-% % rho_a = 1.225; % kg/m^3, density of air
-% % 
-% % k_drag = 1; % drag const (Not defined in paper)
-% % k_lift= 1; % lift const (Not defined in paper)
-% % 
-% % waterline_vol = 2; % m^3  This might have to be a function of roll
-% % added_mass = waterline_vol * rho_w /2; % Added mass phenomena
-
-%% define M
-% p.3 right and p.6 left simplification
-M_rb = [m 0   0     0;
-        0 m   0     0;
-        0 0  I_xx -I_xz;
-        0 0 -I_xz I_zz]; %bugbc check if Ixz = 0
-M_add = diag(added_mass*ones(1,4));% bugbc double check that this approximation is right p 6 of Paper M_A = -diag{X_u_dot, Y_v_dot, K_p_dot, N_r_dot}, on p.3 it says M_A is stricly positive 
-M = M_rb + M_add; 
 
 %% define C
 % p.3 right and p.6 left simplification
@@ -180,7 +121,7 @@ dragk=drag(rho_w,A_k,v_ak,alpha_ak); % Use A_k or A_h??
      -liftk*cos(alpha_ak) - dragk*sin(alpha_ak);
      (-liftk*cos(alpha_ak) - dragk*sin(alpha_ak))*abs(z_k);
      (liftk*cos(alpha_ak) + dragk*sin(alpha_ak))*abs(x_k);
- ]
+ ];
 
 % p.4 left
 phi_dot = roll;
