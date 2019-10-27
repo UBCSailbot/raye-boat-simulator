@@ -1,6 +1,6 @@
 function xk1 = fullBoat_DT(xk, uk)
-Ts = 0.1; %sampling time
-M = 10;
+Ts = 0.5; %sampling time
+M = 1;
 delta = Ts/M;
 xk1 = xk;
 for ct=1:M
