@@ -59,7 +59,10 @@ end
 close(hbar);
 
 
-
+plot(0:Ts:Duration,mvHistory(1,:))
+xlabel('time')
+ylabel('sail angle')
+title('sail angle of the boat')
 plot(0:Ts:Duration,xHistory(4,:))
 
 %plot(0:Ts:Duration,mvHistory(1,:))
