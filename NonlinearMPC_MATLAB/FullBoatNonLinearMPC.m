@@ -42,7 +42,7 @@ y_ref = [1,1,1,-0.3,1,1,1,1]; % reference yaw angle
 
 nloptions = nlmpcmoveopt;
 
-Duration = 30;
+Duration = 10;
 hbar = waitbar(0,'Simulation Progress');
 xHistory = x;
 mvHistory = [0;0];
