@@ -1,5 +1,5 @@
 function hull_resistance = Frh(v_ah)
-
-    hull_resistance = v_ah^2;
+Constants_Oct_15_2019
+    hull_resistance = k_rh*v_ah^2;
 
 end
