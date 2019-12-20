@@ -1,6 +1,7 @@
 function dxdt = nonLinearStateSpace (xInput,u)
 %% define inputs
-Constants_Oct_15_2019;
+load('..\boat_constants.mat')
+
 
 sangle = u(1);   % sail angle in b-frame (same as delta_s in paper)
 rangle = u(2);   % rudder angle in b-frame (same as delta_r in paper)
