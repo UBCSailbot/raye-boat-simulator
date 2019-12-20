@@ -18,8 +18,8 @@ nlobj.Model.OutputFcn = "fullBoat_DT"; %output the yaw
 nlobj.Weights.OutputVariables = [1 1 1 100000 1 1 1 1]; % weight of the output (yaw) in the cost function, 3 seems to be the standard value for MPC
 nlobj.Weights.ManipulatedVariablesRate = [10, 10]; %rate of change of output
 
-nlobj.MV(1).Min = -pi; %minimum sail angle
-nlobj.MV(1).Max = pi;  %maximum sail angle
+nlobj.MV(1).Min = -pi/2; %minimum sail angle
+nlobj.MV(1).Max = pi/2;  %maximum sail angle
 
 nlobj.MV(2).Min = -pi/3; %minimum rudder angle
 nlobj.MV(2).Max = pi/3;  %maximum rudder angle
@@ -42,7 +42,7 @@ y_ref = [1,1,1,-0.3,1,1,1,1]; % reference yaw angle
 
 nloptions = nlmpcmoveopt;
 
-Duration = 10;
+Duration = 6;
 hbar = waitbar(0,'Simulation Progress');
 xHistory = x;
 mvHistory = [0;0];
@@ -59,13 +59,16 @@ end
 close(hbar);
 
 
+figure(1)
+
 plot(0:Ts:Duration,mvHistory(1,:))
 xlabel('time')
 ylabel('sail angle')
 title('sail angle of the boat')
-plot(0:Ts:Duration,xHistory(4,:))
 
-%plot(0:Ts:Duration,mvHistory(1,:))
+
+figure(2)
+plot(0:Ts:Duration,xHistory(4,:))
 xlabel('time')
 ylabel('yaw')
 title('heading of the boat')
