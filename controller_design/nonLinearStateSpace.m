@@ -162,7 +162,7 @@ T = T_s + T_r;
 % p.4 left
 v_dot = -inv(M)*C*vss-inv(M)*D-inv(M)*g+inv(M)*T;
 
-dxdt = zeros(8,1);
+dxdt = sym(zeros(8,1));
 dxdt(1:4) = n_dot;
 dxdt(5:8) = v_dot;
 
