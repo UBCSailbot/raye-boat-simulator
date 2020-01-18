@@ -1,11 +1,13 @@
-function dxdt = fullBoat_CTS (t, xInput,u)
+function [dxdt, xInput] = fullBoat_CTS1(t, xInput, u, k_drag, varargin)
+%disp(nargin)
 %% define inputs
 Constants_Oct_15_2019;
-
+k_drag_identified = k_drag;
+%disp(k_drag)
 sangle = u(1);   % sail angle in b-frame (same as delta_s in paper)
 rangle = u(2);   % rudder angle in b-frame (same as delta_r in paper)
-v_tw = u(3);     % speed of wind in n-frame
-alpha_tw = u(4); % angle of wind in n-frame
+v_tw = 5;     % speed of wind in n-frame
+alpha_tw = pi/4; % angle of wind in n-frame
 
 % Note: n-frame is xyz North-East-Down
 %       b-frame is xyz Forward-Right-Down
@@ -116,7 +118,7 @@ alpha_ah = atan2(v_ah_n(2),-v_ah_n(1));
 
 % p.5 left
 liftk=lift(rho_w,A_k,v_ak,alpha_ak);
-dragk=drag(rho_w,A_k,v_ak,alpha_ak); % Use A_k or A_h??
+dragk=drag(rho_w,A_k,v_ak,alpha_ak, k_drag_identified); % Use A_k or A_h??
  D_k = [-liftk*sin(alpha_ak) + dragk*cos(alpha_ak);
      -liftk*cos(alpha_ak) - dragk*sin(alpha_ak);
      (-liftk*cos(alpha_ak) - dragk*sin(alpha_ak))*abs(z_k);
@@ -142,14 +144,14 @@ D = D_heel + D_h + D_yaw + D_k;
 %% define T
 % Sail Forces p.5 left
 lift_s = lift(rho_a,A_s,v_aw,alpha_s);
-drag_s = drag(rho_a,A_s,v_aw,alpha_s);
+drag_s = drag(rho_a,A_s,v_aw,alpha_s, k_drag_identified);
 T_s = [lift_s*sin(alpha_aw) - drag_s*cos(alpha_aw);
        lift_s*cos(alpha_aw) + drag_s*sin(alpha_aw);
        (lift_s*cos(alpha_aw) + drag_s*sin(alpha_aw))*abs(z_s);
        -(lift_s*sin(alpha_aw) - drag_s*cos(alpha_aw))*x_sm*sin(sangle) + (lift_s*cos(alpha_aw) + drag_s*sin(alpha_aw))*(x_m-x_sm*cos(sangle))];
 
 % Rudder Forces p.6 left simplification
-drag_r = drag(rho_w,A_r,v_ar,alpha_r);
+drag_r = drag(rho_w,A_r,v_ar,alpha_r, k_drag_identified);
 lift_r = lift(rho_w,A_r,v_ar,alpha_r);
 T_r = [-drag_r;
        lift_r;
@@ -161,7 +163,7 @@ T = T_s + T_r;
 % p.4 left
 v_dot = -inv(M)*C*vss-inv(M)*D-inv(M)*g+inv(M)*T;
 
-dxdt = sym(zeros(8,1));
+dxdt = zeros(8,1);
 dxdt(1:4) = n_dot;
 dxdt(5:8) = v_dot;
 

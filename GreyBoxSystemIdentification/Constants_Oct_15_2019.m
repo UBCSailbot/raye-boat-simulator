@@ -37,7 +37,7 @@ z_k = 1.5; % m (estimate from CAD model)
 xyz_s = [x_s;y_s;z_s];  % CoE sail
 xyz_r = [x_r;y_r;z_r];  % CoE rudder
 xyz_h = [x_h;y_h;z_h];  % CoE hull
-x_sm = 0; % 0 only for PID
+x_sm = norm(xyz_s);
 
 %% Force constants
 a_right = -5.9; % same as a in paper Quatratic righting coeficient

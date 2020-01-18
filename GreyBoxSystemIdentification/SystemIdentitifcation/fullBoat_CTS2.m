@@ -1,7 +1,65 @@
-function dxdt = fullBoat_CTS (t, xInput,u)
-%% define inputs
-Constants_Oct_15_2019;
+function [dxdt, xInput] = fullBoat_CTS2(t, xInput, u, m, I_xx, I_zz, I_xz, A_s, A_r, A_k, x_m, x_r, ...
+                                                      y_r, z_r, x_s, y_s, z_s, x_h, y_h, z_h, x_k, y_k, ...
+                                                      z_k, a_right, b_right, c_heel, d_yaw, k_drag, k_lift, ...
+                                                      k_rh, X_u_dot, Y_v_dot, rho_w, rho_a, waterline_vol, varargin)
 
+
+
+%% define inputs
+% m = Parameters(1)
+% I_xx = Parameters(1,2)
+% I_zz = Parameters(3);
+% I_xz = Parameters(4);
+% 
+% A_s = Parameters(5);
+% A_r = Parameters(6);
+% A_k = Parameters(7);
+% 
+% x_m = Parameters(8);
+% x_r = Parameters(9);
+% y_r = Parameters(10);
+% z_r = Parameters(11);
+% x_s = Parameters(12);
+% y_s = Parameters(13);
+% z_s = Parameters(14);
+% 
+% x_h = Parameters(15);
+% y_h = Parameters(16);
+% z_h = Parameters(17);
+% x_k = Parameters(18);
+% y_k = Parameters(19);
+% z_k = Parameters(20);
+% 
+% a_right = Parameters(21);
+% b_right = Parameters(22);
+% c_heel = Parameters(23);
+% d_yaw = Parameters(24);
+% 
+% k_drag = Parameters(25);
+% k_lift = Parameters(26);
+% k_rh = Parameters(27);
+% 
+% X_u_dot = Parameters(28);
+% Y_v_dot = Parameters(29);
+% 
+% rho_w = Parameters(30);
+% rho_a = Parameters(31);
+% waterline_vol = Parameters(32);
+
+xyz_s = [x_s;y_s;z_s];  % CoE sail
+xyz_r = [x_r;y_r;z_r];  % CoE rudder
+xyz_h = [x_h;y_h;z_h];  % CoE hull
+x_sm = norm(xyz_s);
+added_mass = waterline_vol * rho_w /2; % Added mass phenomena <-not sure where this is from
+
+M_rb = [m 0   0     0;
+        0 m   0     0;
+        0 0  I_xx -I_xz;
+        0 0 -I_xz I_zz]; %bugbc check if Ixz = 0
+M_add = diag(added_mass*ones(1,4)); % bugbc double check that this approximation is right: p.6 left M_A = -diag{X_u_dot, Y_v_dot, K_p_dot, N_r_dot}, on p.3 it says M_A is stricly positive 
+M = M_rb + M_add; 
+
+%disp(k_drag)
 sangle = u(1);   % sail angle in b-frame (same as delta_s in paper)
 rangle = u(2);   % rudder angle in b-frame (same as delta_r in paper)
 v_tw = u(3);     % speed of wind in n-frame
@@ -107,16 +165,16 @@ alpha_ah = atan2(v_ah_n(2),-v_ah_n(1));
 
 %% define D
  % bugbc! missing D_h is wrong p.5 right, Frh unknown
- D_h = [Frh(v_ah)*cos(alpha_ah);
-     -Frh(v_ah)*sin(alpha_ah)*cos(phi);
-     (-Frh(v_ah)*sin(alpha_ah)*cos(phi))*abs(z_h);
-     Frh(v_ah)*sin(alpha_ah)*cos(phi)*abs(x_h);
+ D_h = [Frh(v_ah, k_rh)*cos(alpha_ah);
+     -Frh(v_ah, k_rh)*sin(alpha_ah)*cos(phi);
+     (-Frh(v_ah, k_rh)*sin(alpha_ah)*cos(phi))*abs(z_h);
+     Frh(v_ah, k_rh)*sin(alpha_ah)*cos(phi)*abs(x_h);
  ];
 
 
 % p.5 left
-liftk=lift(rho_w,A_k,v_ak,alpha_ak);
-dragk=drag(rho_w,A_k,v_ak,alpha_ak); % Use A_k or A_h??
+liftk=lift(rho_w,A_k,v_ak,alpha_ak, k_lift);
+dragk=drag(rho_w,A_k,v_ak,alpha_ak, k_drag); % Use A_k or A_h??
  D_k = [-liftk*sin(alpha_ak) + dragk*cos(alpha_ak);
      -liftk*cos(alpha_ak) - dragk*sin(alpha_ak);
      (-liftk*cos(alpha_ak) - dragk*sin(alpha_ak))*abs(z_k);
@@ -141,16 +199,16 @@ D = D_heel + D_h + D_yaw + D_k;
 
 %% define T
 % Sail Forces p.5 left
-lift_s = lift(rho_a,A_s,v_aw,alpha_s);
-drag_s = drag(rho_a,A_s,v_aw,alpha_s);
+lift_s = lift(rho_a,A_s,v_aw,alpha_s, k_lift);
+drag_s = drag(rho_a,A_s,v_aw,alpha_s, k_drag);
 T_s = [lift_s*sin(alpha_aw) - drag_s*cos(alpha_aw);
        lift_s*cos(alpha_aw) + drag_s*sin(alpha_aw);
        (lift_s*cos(alpha_aw) + drag_s*sin(alpha_aw))*abs(z_s);
        -(lift_s*sin(alpha_aw) - drag_s*cos(alpha_aw))*x_sm*sin(sangle) + (lift_s*cos(alpha_aw) + drag_s*sin(alpha_aw))*(x_m-x_sm*cos(sangle))];
 
 % Rudder Forces p.6 left simplification
-drag_r = drag(rho_w,A_r,v_ar,alpha_r);
-lift_r = lift(rho_w,A_r,v_ar,alpha_r);
+drag_r = drag(rho_w,A_r,v_ar,alpha_r, k_drag);
+lift_r = lift(rho_w,A_r,v_ar,alpha_r, k_lift);
 T_r = [-drag_r;
        lift_r;
        lift_r*abs(z_r);
@@ -161,7 +219,7 @@ T = T_s + T_r;
 % p.4 left
 v_dot = -inv(M)*C*vss-inv(M)*D-inv(M)*g+inv(M)*T;
 
-dxdt = sym(zeros(8,1));
+dxdt = zeros(8,1);
 dxdt(1:4) = n_dot;
 dxdt(5:8) = v_dot;
 

@@ -1,4 +1,4 @@
-function [dxdt, x] = simpleBoat_CTS(t, x, u)
+function dxdt = simpleBoat_CTS(t, x, u, p1_est)
 %PARAMETERS
 % u is the input to the system with u = [rudder angle, sail angle]
 % x = is the state of the system with x = [x, y, theta, surge, omega]
@@ -16,7 +16,7 @@ p8 = 2; % distance to rudder [m]
 p9 = 300; % mass of the boat [kg]
 p10 = 400; % moment of inertia [kg m^2]
 p11 = 0.2; % rudder break coefficient
-
+p1 = p1_est;
 %Temp Constants
 a_aw = 2; % speed of apparent wind
 psi_aw = 3.1415; % angle of apparent wind 
