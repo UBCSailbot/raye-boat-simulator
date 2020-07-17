@@ -1,6 +1,6 @@
 # boat-simulator
 
-This repository contains MATLAB scripts and Simulink models for the purpose of creating an MPC controller for UBC Sailbot. As of Aug 2019, all the equations are based off of _Modeling and Nonlinear Heading Control of Sailing Yachts_ by Jerome Jouffroy. The pdf can be found [here](Jouffroy-2013linjoe.pdf). 
+This repository contains MATLAB scripts and Simulink models for the purpose of creating an MPC controller for UBC Sailbot. As of Aug 2019, all the equations are based off of _Modeling and Nonlinear Heading Control of Sailing Yachts_ by Jerome Jouffroy. The pdf can be found [here](docs/Jouffroy-2013linjoe.pdf). 
 
 # Overview of the Model
 
@@ -16,17 +16,17 @@ The model input variables that we control are the rudder and sail angle of the b
 
 3. Open MATLAB and find the folder to `boat-simulator` that you just cloned (folders shown on left)
 
-4. Find `Constants_Aug_2019.m` and run the script. This loads the constants of the Simulink model into your workspace. Please keep this file updated to match `Simulink_models/Assemble_Blocks_Aug_24.slx`. If it tells you it can't run from where you are, always choose Move to Folder, not Add to Path. If you do not run this, the Simulink model will complain that its variables are undefined.
+4. Find `Constants_Oct_15_2019.m` and run the script. This loads the constants of the Simulink model into your workspace. Please keep this file updated to match `Assemble_Blocks_Oct_15.slx`. If it tells you it can't run from where you are, always choose Move to Folder, not Add to Path. If you do not run this, the Simulink model will complain that its variables are undefined.
 
-5. Find `Simulink_models/sailbot_library.slx` and double click it. If there are any issues with this, install the toolboxes needed to get this open. This opens the library that has the Simulink blocks that we defined. This is where all the equations from the paper are defined. If there are any bugs in the system, it is likely contained in these blocks. Please note that if you change a block here, it automatically changes the same blocks used in `Simulink_models/Assemble_Blocks_Aug_24.slx`. Please make all equation related blocks and block changes here. Note: you need to unlock the library to make changes (try to change something. A warning will pop up and click the unlock library link in the warning). If you do not run this line, the Simulink model will complain that it cannot find the blocks. If you would like to investigate a block, double click on it to see what is inside.
+5. Find `Simulink_models/sailbot_library.slx` and double click it. If there are any issues with this, install the toolboxes needed to get this open. This opens the library that has the Simulink blocks that we defined. This is where all the equations from the paper are defined. If there are any bugs in the system, it is likely contained in these blocks. Please note that if you change a block here, it automatically changes the same blocks used in `Assemble_Blocks_Oct_15.slx`. Please make all equation related blocks and block changes here. Note: you need to unlock the library to make changes (try to change something. A warning will pop up and click the unlock library link in the warning). If you do not run this line, the Simulink model will complain that it cannot find the blocks. If you would like to investigate a block, double click on it to see what is inside.
 
-![Sailbot library](images/Sailbot_Library.png)
+![Sailbot library](docs/images/Sailbot_Library.png)
 
 _sailbot_library.slx as of Aug 2019_
 
 6. Find `Simulink_models/Assemble_Blocks_Aug_24.slx` and double click it. If there are any issues with this, install the toolboxes needed to get this open. This opens the Simulink library that assembles the blocks from `Simulink_models/sailbot_library.slx`. If there are any bugs connecting blocks, they will be here. If there is an error related to a block, please make the change in `Simulink_models/sailbot_library.slx`, not here. This will make your changes save in a more reliable way. Depending on the state of the system, you may need to double click on the blocks to see what is inside of them. 
 
-![Assemble Blocks](images/Assemble_Blocks_Aug_24.png)
+![Assemble Blocks](docs/images/Assemble_Blocks_Aug_24.png)
 
 _Assemble_Blocks_Aug_24.slx as of Aug 2019_
 
