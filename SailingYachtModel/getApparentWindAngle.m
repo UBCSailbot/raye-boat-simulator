@@ -1,4 +1,4 @@
-function theta = apparentWind(surge, sway, windSpeed, windAngle, psi)
+function theta = getApparentWindAngle(surge, sway, windSpeed, windAngle, psi)
 
 boatVel = [surge, sway];
 windAngle = windAngle - psi;

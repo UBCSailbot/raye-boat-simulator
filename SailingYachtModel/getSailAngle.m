@@ -1,6 +1,6 @@
 
-function [maxAngle] = sailAngle(boatAngleToWind)
-    boatAngle = pi - abs(boatAngleToWind);
+function [maxAngle] = getSailAngle(apparentWindAngle)
+    boatAngle = pi - abs(apparentWindAngle);
     angleSet = 0:pi/100:pi;
     [Cls, Cds] = sailcoef(angleSet);
     mag = (Cls .*sin(boatAngle)) - (Cds .*cos(boatAngle));
