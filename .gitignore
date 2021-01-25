@@ -42,3 +42,6 @@ codegen/
 
 # Octave session info
 octave-workspace
+build_ros_model.sh
+
+*.tgz
