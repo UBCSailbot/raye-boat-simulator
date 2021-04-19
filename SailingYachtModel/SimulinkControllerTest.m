@@ -9,5 +9,7 @@ for desiredHeading = linspace(0,2*pi,20)
             (par.alpha_w+pi) + MIN_ANGLE_DEVIATE_FROM_UP_WIND, desiredHeading)
         continue;
     end
+    disp("attempting to assert desiredheading = " + string(desiredHeading) + " radians is reached");
     sim('SailingYachtModel'); 
+    assert(abs(finalHeadingErrorFromSim)<0.05);
 end
