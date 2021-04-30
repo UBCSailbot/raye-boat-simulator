@@ -6,7 +6,9 @@ MIN_ANGLE_DEVIATE_FROM_UP_WIND = pi/6;
 
 %run the simulation first so global variables defined
 %in the Simulink model loads
- sim('SailingYachtModel'); 
+
+desiredHeading = 2; %arbitrary choice, so SailingYachtModel.slx runs
+sim('SailingYachtModel'); 
 
 for desiredHeading = linspace(0,2*pi,20)
     % (par.alpha_w + pi) because wind blows from alpha_aw towards boat
