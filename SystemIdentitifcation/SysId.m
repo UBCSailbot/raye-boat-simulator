@@ -53,8 +53,8 @@ bool_est = {false false false false false false false false...
             % k_drag, k_lift, k_rh, X_u_dot, rho_w, rho_a, waterline_vol
             
  VALUES_BOOL = cell(32, 1);
- VALUES_BOOL(:) = {false};
- VALUES_BOOL(1) = {true};
+ VALUES_BOOL(:) = {true};
+ VALUES_BOOL(1) = {false};
 
 %fixing the parameters as dictated by bool_est
 nlgr = setpar(nlgr, 'Fixed', VALUES_BOOL);
@@ -76,3 +76,13 @@ nlgr = nlgreyest(z, nlgr, opt );
 nlgr.Report
 fprintf('\n\nThe search termination condition:\n')
 nlgr.Report.Termination
+
+compare(z, nlgr)
+
+EstimateValues = cell(1,32);
+for i = 1:32
+    EstimatedValues(i) = nlgr.parameter(i).Value;
+end
+
+save('EstimatedValues.mat', 'EstimatedValues');
+
