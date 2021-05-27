@@ -43,14 +43,6 @@ nlgr.InputGroup.noise = [3 4];
 %bool_est is set to false when a parameter is not to be estimated and is to
 %be kept constant at the initial value ex. mass
 
-bool_est = {false false false false false false false false... 
-           % mass, I_xx, I_zz, I_xz, A_s, A_r, A_k, x_m 
-            false false false false false false false false... 
-            % x_r y_r z_r x_s y_s z_s x_h y_h
-            false false false false false false false false... 
-            % z_H, x_k, y_k, z_k, a_right, b_right, c_heel, d_yaw
-            false false false false false false false false};  
-            % k_drag, k_lift, k_rh, X_u_dot, rho_w, rho_a, waterline_vol
             
  VALUES_BOOL = cell(32, 1);
  VALUES_BOOL(:) = {true};
