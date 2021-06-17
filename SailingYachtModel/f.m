@@ -134,10 +134,12 @@ G = [ 0 ; 0 ; par.a*phi_deg^2+par.b*phi_deg + M_xw ; M_zw];
 % computation of nu_dot
 nu_dot = -M\(C_RB*nu+C_A*nu)-M\D-M\G+M\tau; 
  
-% output the derivative of the state extended with the sail angle
+% output the derivative of the state extended with the sail angle and
+% apparent wind speed
 X_dot_ext = [ eta_dot   ; 
               nu_dot   ;
-              delta_s];
+              delta_s;
+              sqrt(V_awu^2+V_awv^2)];
 
 
 %------------------------------------------------------------------------------------------------------------------------------
