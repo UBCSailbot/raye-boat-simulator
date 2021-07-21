@@ -1,18 +1,16 @@
-function [error] = getJibeControllerErrorRad(currentHeading, desiredHeading, apparentWindAngle)
+function [error] = getJibeControllerErrorRad(currentHeading, desiredHeading, jibeDirection)
 
-%bound all values between 0 and 2Pi
-%flip wind direction by half a turn so 0 degrees heading relative to wind
-%is upwind
-apparentWindAngle = mod(apparentWindAngle + pi, 2 * pi);
+%bind the heading between 0 and 2pi
 currentHeading = mod(currentHeading, 2 * pi);
 desiredHeading = mod(desiredHeading, 2 * pi);
 
-%find heading relative to wind, where 0 degrees is upwind 
-windRelativeCurrentHeading = mod(currentHeading - apparentWindAngle, 2 * pi);
-windRelativeDesiredHeading = mod(desiredHeading - apparentWindAngle, 2 * pi);
-
-%find error term
-error = windRelativeDesiredHeading - windRelativeCurrentHeading;
+    %%takes in the direction the boat should turn and get the difference
+    %%between current and desired heading in that direction
+    if(jibeDirection > 0)
+        error = max(currentHeading - desiredHeading, desiredHeading - currentHeading);
+    elseif(jibeDirection < 0)
+        error = min(currentHeading - desiredHeading, desiredHeading - currentHeading);
+    end
 
 end
 
