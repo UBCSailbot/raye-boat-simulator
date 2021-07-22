@@ -6,10 +6,11 @@ desiredHeading = mod(desiredHeading, 2 * pi);
 
     %%takes in the direction the boat should turn and get the difference
     %%between current and desired heading in that direction
+    errorOneWay = desiredHeading - currentHeading;
     if(jibeDirection > 0)
-        error = max(currentHeading - desiredHeading, desiredHeading - currentHeading);
+        error = max((2 * pi  - abs(errorOneWay)) * -sign(errorOneWay), errorOneWay);
     elseif(jibeDirection < 0)
-        error = min(currentHeading - desiredHeading, desiredHeading - currentHeading);
+        error = min((2 * pi  - abs(errorOneWay)) * -sign(errorOneWay), errorOneWay);
     end
 
 end
