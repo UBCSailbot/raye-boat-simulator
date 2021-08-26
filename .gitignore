@@ -45,3 +45,9 @@ octave-workspace
 build_ros_model.sh
 
 *.tgz
+
+*.cpp
+
+*.h
+
+Integration/boat_controller_ert_rtw/
