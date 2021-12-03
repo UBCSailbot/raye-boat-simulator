@@ -1,5 +1,5 @@
 
-
+%define constants. Modify these as applicable
 global par
 par.m = 25900;                         % (kg),mass of the vehicle
 par.Ixx = 133690;          
@@ -14,7 +14,7 @@ par.a26 = -6190;
 par.a46 = 4730;                        % (kg),added mass coef.
 
 par.vt = 5;                           % the norm of wind velocity
-par.alpha_w = pi/4;                      % the direction of wind (coming from the north, ie going south)
+par.alpha_w = pi/4;                      % the direction of wind 
 
 par.rho_a = 1.2;                       % (kg/m^3), air density
 par.As = 170;                          % (m^2), sail area
