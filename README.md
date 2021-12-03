@@ -6,24 +6,20 @@ This repository contains MATLAB scripts and Simulink models for the purpose of c
 
 1. Install MATLAB and Simulink. The installer will ask you what toolboxes you want to install and be sure to install the [ROS Toolbox](https://www.mathworks.com/products/ros.html). This is free for UBC students, with instructions [here](https://it.ubc.ca/services/desktop-print-services/software-licensing/matlab)
 
-2. Clone the repository `git clone https://github.com/UBCSailbot/boat-simulator.git`
+2. Open MATLAB and change your working directory to the `boat-simulator` folder that you just cloned
 
-3. Open MATLAB and change your working directory to the `boat-simulator` folder that you just cloned
+you can now run relevant Simulink files. To run the boat simulator ROS node, complete the following:
 
-you can now run relevant Simulink files. To run the boat simulator as a standalone ROS node, complete the following:
+3. Install ROS Melodic on a Ubuntu 18.04 (or similar). http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
 
-4. Install ROS Melodic on a Ubuntu 18.04 (or similar). http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
+4. Find the location that you want to create a ROS workspace (eg. `cd ~`)
 
-5. Find the location that you want to create a ROS workspace (eg. `cd ~`)
+5. Type the commands `mkdir -p catkin_ws/src` `cd catkin_ws` `catkin_make`.
 
-6. Type the commands `mkdir -p catkin_ws/src` `cd catkin_ws` `catkin_make`.
+6. run (or update first then run if you didn't follow the naming convention in steps 4 and 5) [add_custom_ros_msg.m](/home/bruce/Sailbot/boat-simulator/Integration/add_custom_ros_msg.m) in MATLAB. MATLAB will have certain prompts for you to follow outputted to the MATLAB's command line output, but I personally found they were unnecessary
 
-7. Clone the sailbot-msgs repository in the src folder: `git clone https://github.com/UBCSailbot/sailbot-msg.git`.
-
-8. update the [add_custom_ros_msg.m](/home/bruce/Sailbot/boat-simulator/Integration/add_custom_ros_msg.m) file and run it. Follow MATLAB's follow up promots as well
-
-9. run [boat_simulator_ros_node.slx](Integration/boat_simulator_ros_node.slx) which subscribes to the `/rudder_winch_actuation_angle` topic and publishes to the `/sensors` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details.
-
+7. in the MATLAB command line type `sim boat_simulator_ros_node` (make sure your MATLAB path has this file run. This launches a ROS node which subscribes to the `/rudder_winch_actuation_angle` topic and publishes to the `/sensors` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details.
+. This node essentially behaves like a mock sailboat 
 # Variables
 
 There are many variables in this complicated model. While the Jouffroy paper does a good job explaining the varibles, it is long and overwhelming to read and understand. Here, I will define the variables more clearly and highlight some easy misunderstandings (as of Aug 2019):
