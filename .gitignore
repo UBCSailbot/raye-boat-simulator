@@ -53,3 +53,5 @@ build_ros_model.sh
 Integration/boat_controller_ert_rtw/
 
 boat_simulator_ros_node_ert_rtw/
+
+*.log
