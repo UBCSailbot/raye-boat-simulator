@@ -3,5 +3,6 @@
 % 2. ~/catkin_ws/src/boat_controller
 
 %replace with your catkin_ws/src folder path
-folderpath = '/home/bruce/catkin_ws/src/';
+folderpath = '~/catkin_ws/src/';
 rosgenmsg(folderpath)
+addpath('~/catkin_ws/src/matlab_gen/msggen')
