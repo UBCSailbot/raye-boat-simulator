@@ -7,3 +7,6 @@
 folderpath = "~/catkin_ws/src/";
 rosgenmsg(folderpath)
 addpath(folderpath + "/matlab_gen/msggen")
+
+%todo setup a test to see if can create sailbot message
+%todo also verifiy if updating sailbot message updates atuomatically
