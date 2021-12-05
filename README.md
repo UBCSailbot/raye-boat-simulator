@@ -4,11 +4,11 @@ This repository contains MATLAB scripts and Simulink models for the purpose of c
 
 # Quick Start Instructions
 
-1. Install MATLAB and Simulink. The installer will ask you what toolboxes you want to install and be sure to install the [ROS Toolbox](https://www.mathworks.com/products/ros.html). This is free for UBC students, with instructions [here](https://it.ubc.ca/services/desktop-print-services/software-licensing/matlab)
+1. Install MATLAB and Simulink on an Ubuntu 18.04 (or similar). The installer will ask you what toolboxes you want to install and be sure to install the [ROS Toolbox](https://www.mathworks.com/products/ros.html). This is free for UBC students, with instructions [here](https://it.ubc.ca/services/desktop-print-services/software-licensing/matlab)
 
 2. Clone this repository to a desired location
 
-3. Install ROS Melodic on a Ubuntu 18.04 (or similar). http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
+3. Install ROS Melodic. http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
 
 4. Find the location that you want to create a ROS workspace (eg. `cd ~`)
 
