@@ -14,9 +14,13 @@ This repository contains MATLAB scripts and Simulink models for the purpose of c
 
 5. Type the commands `mkdir -p catkin_ws/src` `cd catkin_ws` `catkin_make`.
 
-6. run (or update first then run if you didn't follow the naming convention in steps 4 and 5) [add_custom_ros_msg.m](/home/bruce/Sailbot/boat-simulator/Integration/add_custom_ros_msg.m) in MATLAB. MATLAB will have certain prompts for you to follow outputted to the MATLAB's command line output, but I personally found they were unnecessary
+6. Run (or update first if didn't follow naming convention in steps 4 and 5) [add_custom_ros_msg.m](Integration/add_custom_ros_msg.m) in MATLAB. MATLAB will display prompts for you to follow, but I personally found they were unnecessary
 
-7. run [startBoatSimulator.m](Integration/startBoatSimulator.m). This launches a ROS node which subscribes to the `/rudder_winch_actuation_angle` topic and publishes to the `/sensors` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details. You can modify constants such as wind speed and direction using the same file. This ROS node essentially behaves like a mock sailboat 
+7. Run [startBoatSimulator.m](Integration/startBoatSimulator.m). This launches a ROS node which subscribes to the `/rudder_winch_actuation_angle` topic and publishes to the `/sensors` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details. You can modify constants such as wind speed and direction by modifying [startBoatSimulator.m](Integration/startBoatSimulator.m). This ROS node essentially behaves like a mock sailboat 
+
+# Running
+Follow step 7 in Quick Start Instructions
+
 
 # Variables
 
