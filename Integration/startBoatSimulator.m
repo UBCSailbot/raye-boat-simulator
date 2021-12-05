@@ -1,3 +1,5 @@
+%note runing this the first time after openiang
+%MATLAB takes a while (~ 1.5 minutes for Bruce 
 
 %define constants. Modify these as applicable
 global par
@@ -13,7 +15,10 @@ par.a24 = -13160;
 par.a26 = -6190; 
 par.a46 = 4730;                        % (kg),added mass coef.
 
-par.vt = 5;                           % the norm of wind velocity
+% see here for sensor conventions:
+%https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1462599682/Software+Sensor+Units+and+Convention
+
+par.vt = 5;                           % the norm of wind velocity 
 par.alpha_w = pi/4;                      % the direction of wind 
 
 par.rho_a = 1.2;                       % (kg/m^3), air density
@@ -61,7 +66,6 @@ par.b = 8160;
 par.c = 120000;
 par.d = 50000;
 
-%note runing this the first time you start simulink afte ropeniangMATLAB
-%takes a hilwe (~ 1.5 minutes for Bruce)
 set_param('boat_simulator_ros_node', 'SimulationMode', 'normal')
+load_system('boat_simulator_ros_node.slx');
 sim boat_simulator_ros_node.slx;
