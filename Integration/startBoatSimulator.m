@@ -66,6 +66,6 @@ par.b = 8160;
 par.c = 120000;
 par.d = 50000;
 
-set_param('boat_simulator_ros_node', 'SimulationMode', 'normal')
 load_system('boat_simulator_ros_node.slx');
+set_param('boat_simulator_ros_node', 'SimulationMode', 'normal')
 sim boat_simulator_ros_node.slx;
