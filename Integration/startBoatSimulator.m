@@ -18,7 +18,7 @@ par.a46 = 4730;                        % (kg),added mass coef.
 % see here for sensor conventions:
 %https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1462599682/Software+Sensor+Units+and+Convention
 
-par.vt = 5;                           % the norm of wind velocity 
+par.vt = 5;                           % (m/s) the norm of wind velocity 
 par.alpha_w = pi/4;                      % the direction of wind 
 
 par.rho_a = 1.2;                       % (kg/m^3), air density
