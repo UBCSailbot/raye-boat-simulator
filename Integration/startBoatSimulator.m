@@ -1,4 +1,4 @@
-%note runing this the first time after openiang
+%note runing this the first time after opening
 %MATLAB takes a while (~ 1.5 minutes for Bruce 
 
 %define constants. Modify these as applicable
