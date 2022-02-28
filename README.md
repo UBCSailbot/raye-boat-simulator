@@ -1,4 +1,4 @@
-# boat-simulator
+e # boat-simulator
 
 This repository contains MATLAB scripts and Simulink models for the purpose of creating a low-level controller for UBC Sailbot. The model is based on  _Modeling and Nonlinear Heading Control of Sailing Yachts_ by Jerome Jouffroy. The pdf can be found [here](docs/Jouffroy-2013linjoe.pdf). 
 
@@ -16,8 +16,9 @@ This repository contains MATLAB scripts and Simulink models for the purpose of c
 
 6. Run (or update first if didn't follow naming convention in steps 4 and 5) [add_custom_ros_msg.m](Integration/add_custom_ros_msg.m) in MATLAB. MATLAB will display prompts for you to follow, but I personally found they were unnecessary
 
-7. Run [startBoatSimulator.m](Integration/startBoatSimulator.m). This launches a ROS node which subscribes to the `/rudder_winch_actuation_angle` topic and publishes to the `/sensors` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details. You can modify constants such as wind speed and direction by modifying [startBoatSimulator.m](Integration/startBoatSimulator.m). This ROS node essentially behaves like a mock sailboat.Note that GPS data is only published to "gps_can"
+7. Run [startBoatSimulator.m](Integration/startBoatSimulator.m). This launches a ROS node which subscribes to the `/rudder_winch_actuation_angle` topic and publishes to the `/sensors` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details. You can modify constants such as wind speed and direction by modifying [startBoatSimulator.m](Integration/startBoatSimulator.m). This ROS node essentially behaves like a mock sailboat. Note that not all sensor readings are being published. Currently the following topics are being published but open boat_simulator_ros_node.slx in Simulink to find the specifics. 
 
+[docs/publishedMessages.png]
 # Running
 Follow step 7 in Quick Start Instructions
 
